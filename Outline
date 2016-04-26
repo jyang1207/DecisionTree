@@ -1,0 +1,27 @@
+Coding:
+Decision tree classifier:
+	Node class -- null node
+		Fields:
+		Feature
+		threshold
+		Error
+		Entropy
+		Class counts
+		
+		Children 
+Tree class
+	build(dataset, depth)
+	prune()
+	classify(dataset)
+
+	test()
+Forrest class
+	List of trees
+	build(dataset, tree depth)
+	classify(dataset)
+
+	test()
+Need something to train data set
+	D-fold cross validation
+
+Visualize PCA on first three features
