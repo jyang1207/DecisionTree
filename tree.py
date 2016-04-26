@@ -8,12 +8,14 @@ class Tree:
 		if self.dataObj != None:
 			self.build(dataObj, depth)
 			
+		self.root = node.Node(depth)
+			
 	# build a decision tree using the training data set
-	def build(train_data, depth):
+	def build(self, train_data, depth):
 		
 	
 	# prune the tree so that the information gain of children nodes are larger than the parent one
-	def prune():
+	def prune(self,):
 	
 	
 	# take in a data set and return a list of classes
