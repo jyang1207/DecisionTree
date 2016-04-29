@@ -8,6 +8,7 @@ def Node:
 		self.feature = feature
 		self.threshold = threshold
 		self.entropy = None
+		self.error = None
 		self.classCounts = []
 		self.depth = depth
 	
@@ -21,6 +22,7 @@ def Node:
 		for thing in mapping:
 			self.classCounts[thing]+=1
 		#calculate entropy
+		#calculate error
 		
 	def split(self):
 		if self.depth<0:
@@ -51,7 +53,17 @@ def Node:
 			return
 		self.right.prune()
 		self.left.prune()
-		
+		childerror = 0
+		for cat in self.right.categories:
+			childerror+= self.right.error * cat
+		for cat in self.left.categories:
+			childerror+= self.left.error * cat
+		parerror = 0
+		for cat in self.categories:
+			parerror += self.error*cat
+		if childerror>parerror:
+			self.right, self.left = None
+			
 	def classify(self, point):
 		if self.right is None:
 			index = 0
