@@ -25,8 +25,9 @@ def Node:
 		p = []
 		for i in range(categories.shape[0]):
 			p[i] = self.classCounts[i]/dataMatrix.shape[0]
-		ent = np.sum(np.multiply(-p, np.log2(p)), axis=1)
+		self.entropy = np.sum(np.multiply(-p, np.log2(p)), axis=1)
 		#calculate error
+		
 		
 	def split(self):
 		if self.depth<0:
