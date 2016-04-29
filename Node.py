@@ -22,6 +22,10 @@ def Node:
 		for thing in mapping:
 			self.classCounts[thing]+=1
 		#calculate entropy
+		p = []
+		for i in range(categories.shape[0]):
+			p[i] = self.classCounts[i]/dataMatrix.shape[0]
+		ent = np.sum(np.multiply(-p, np.log2(p)), axis=1)
 		#calculate error
 		
 	def split(self):
