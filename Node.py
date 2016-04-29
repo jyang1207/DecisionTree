@@ -2,11 +2,11 @@ import numpy as np
 
 def Node:
 	#feature is an int
-	def __init__(self, depth, feature, threshold):
+	def __init__(self, depth):
 		self.right = None
 		self.left = None
-		self.feature = feature
-		self.threshold = threshold
+		self.feature = None
+		self.threshold = None
 		self.entropy = None
 		self.error = None
 		self.classCounts = []
@@ -28,23 +28,31 @@ def Node:
 		if self.depth<0:
 			return
 		#have it create them one at a time instead of all of them and only storing the "best one"
-		best = Node(depth-1, 0, self.data[0,0])
-		newDat = self.data[self.data[0]>best.threshold])
-		newCat = self.categories[self.data[0]>best.threshold])
+		best = Node(depth-1)
+		bestFeature = 0
+		bestThreshold = self.data[bestFeature,0]
+		newDat = self.data[self.data[0]>bestThreshold)
+		newCat = self.categories[self.data[0]>bestThreshold)
 		best.build(newDat, newCat)
 		for i in range(self.data.shape[0]):
 			for j in range(self.data.shape[1]):
-				new = Node(depth-1, j, self.data[i,j])
-				newDat = self.data[self.data[j]>new.threshold])
-				newCat = self.categories[self.data[j]>new.threshold])
+				new = Node(depth-1)
+				newFeature = j
+				newThreshold self.data[i,j]
+				newDat = self.data[self.data[j]>newThreshold])
+				newCat = self.categories[self.data[j]>newThreshold])
 				new.build(newDat, newCat)
 				if new.entropy<best.entropy:
 					best = new
+					bestThreshold = newThreshold
+					bestFeature = newFeature
+		self.threshold = bestThreshold
+		self.feature = newFeature
 		self.right = best
 		self.right.split()
-		self.left = Node(depth-1, self.right.feature, self.right.threshold)
-		leftDat = self.data[self.data[self.right.feature]<self.right.threshold])
-		leftCat = self.categories[self.data[self.right.feature]<self.right.threshold])
+		self.left = Node(depth-1)
+		leftDat = self.data[self.data[self.feature]<self.threshold])
+		leftCat = self.categories[self.data[self.feature]<self.threshold])
 		self.left.build(leftDat, leftCat)
 		self.left.split()
 		
