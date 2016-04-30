@@ -15,9 +15,9 @@ class Tree:
 			
 			
 	# build a decision tree using the training data set
-	def build(self, train_data, categories, depth):
+	def build(self, train_data, categories, depth, z):
 		self.root = Node.Node(depth)
-		self.root.build(train_data.get_data(train_data.get_headers()), categories)
+		self.root.build(train_data.get_data(train_data.get_headers()), categories, z)
 		self.root.split()
 	
 	# prune the tree so that the information gain of children nodes are larger than the parent one
