@@ -12,7 +12,8 @@ def Node:
 		self.classCounts = []
 		self.depth = depth
 	
-	def build(self, dataMatrix, categories):
+	#set the data and categories of the node and calculate entropy and error
+	def build(self, dataMatrix, categories, z):
 		self.data = dataMatrix
 		self.categories = categories
 		col = dataMatrix[:,self.feature]
@@ -27,8 +28,13 @@ def Node:
 			p[i] = self.classCounts[i]/dataMatrix.shape[0]
 		self.entropy = np.sum(np.multiply(-p, np.log2(p)), axis=1)
 		#calculate error
-		
-		
+		f = (np.sum(self.classCounts) - np.max(self.classCounts))/np.sum(self.classCounts)
+		N = dataMatrix.shape[0]
+		self.error = f + z*z/(2*N)
+		self.error = self.error + z*np.sqrt(f/N - f*f/N + z*z/4/N/N)
+		self.error = self.error/(1 + z*z/N)
+	
+	#calculate the optimal feature and threshold and split the data to two children nodes
 	def split(self):
 		if self.depth<0:
 			return
@@ -60,7 +66,8 @@ def Node:
 		leftCat = self.categories[self.data[self.feature]<self.threshold])
 		self.left.build(leftDat, leftCat)
 		self.left.split()
-		
+	
+	#go through all the nodes bottom-up and relace redundant subtrees with leaf nodes
 	def prune(self):
 		if self.depth == 0:
 			return
@@ -76,7 +83,8 @@ def Node:
 			parerror += self.error*cat
 		if childerror>parerror:
 			self.right, self.left = None
-			
+	
+	#take in a data point and return its class
 	def classify(self, point):
 		if self.right is None:
 			index = 0
