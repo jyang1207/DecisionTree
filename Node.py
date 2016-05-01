@@ -17,7 +17,7 @@ def Node:
 		self.data = dataMatrix
 		self.categories = categories
 		col = dataMatrix[:,self.feature]
-		unique, mapping = np.unique(categories, return_inverse = True)
+		unique, mapping = np.unique(np.array(categories), return_inverse = True)
 		for i in range(len(unique)):
 			self.classCounts.append(0)
 		for thing in mapping:
@@ -91,7 +91,7 @@ def Node:
 			for i in range(self.classCounts):
 				if self.classCounts[i]>self.classCounts[index]:
 					index = i
-			unique,mapping = np.unique(self.categories, return_inverse = True)
+			unique,mapping = np.unique(np.array(self.categories), return_inverse = True)
 			return unique[index]
 		if point[self.feature]>self.threshold:
 			return self.right.classify(point)
