@@ -4,20 +4,22 @@ import data
 
 class Tree:
 
-	def __init__(self, dataObj=None, categories=None depth=20):
+	def __init__(self, dataObj=None, categories=None, depth=20, weights = None):
 		
 		self.dataObj = dataObj
 		self.depth = depth
 		
 		self.root = None
 		if self.dataObj != None:
-			self.build(dataObj, categories depth)
+			self.build(dataObj, categories, weights, depth)
 			
 			
 	# build a decision tree using the training data set
-	def build(self, train_data, categories, depth, z):
+	def build(self, train_data, categories, weights, depth, z):
 		self.root = Node.Node(depth)
-		self.root.build(train_data.get_data(train_data.get_headers()), categories, z)
+		if weights is None:
+			weights= np.one_like(categories)
+		self.root.build(train_data.get_data(train_data.get_headers()), categories, weights z)
 		self.root.split()
 	
 	# prune the tree so that the information gain of children nodes are larger than the parent one
