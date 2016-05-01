@@ -13,15 +13,15 @@ def Node:
 		self.depth = depth
 	
 	#set the data and categories of the node and calculate entropy and error
-	def build(self, dataMatrix, categories, z):
+	def build(self, dataMatrix, categories, weights, z):
 		self.data = dataMatrix
 		self.categories = categories
 		col = dataMatrix[:,self.feature]
 		unique, mapping = np.unique(np.array(categories), return_inverse = True)
 		for i in range(len(unique)):
 			self.classCounts.append(0)
-		for thing in mapping:
-			self.classCounts[thing]+=1
+		for i in range(len(mapping)):
+			self.classCounts[mapping[i]]+=weights[i]
 		#calculate entropy
 		p = []
 		for i in range(categories.shape[0]):
