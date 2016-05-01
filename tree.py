@@ -19,7 +19,7 @@ class Tree:
 		self.root = Node.Node(depth)
 		if weights is None:
 			weights= np.one_like(categories)
-		self.root.build(train_data.get_data(train_data.get_headers()), categories, weights z)
+		self.root.build(train_data.get_data(train_data.get_headers()), categories, weights, z)
 		self.root.split()
 	
 	# prune the tree so that the information gain of children nodes are larger than the parent one
