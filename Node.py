@@ -16,6 +16,8 @@ def Node:
 	def build(self, dataMatrix, categories, weights, z):
 		self.data = dataMatrix
 		self.categories = categories
+		self.weights = weights
+		#need to do something with z what is it
 		col = dataMatrix[:,self.feature]
 		unique, mapping = np.unique(np.array(categories), return_inverse = True)
 		for i in range(len(unique)):
@@ -42,9 +44,10 @@ def Node:
 		best = Node(depth-1)
 		bestFeature = 0
 		bestThreshold = self.data[bestFeature,0]
-		newDat = self.data[self.data[0]>bestThreshold)
-		newCat = self.categories[self.data[0]>bestThreshold)
-		best.build(newDat, newCat)
+		newDat = self.data[self.data[0]>bestThreshold])
+		newCat = self.categories[self.data[0]>bestThreshold])
+		newWeight = self.weights[self.data[0]>bestThreshold])
+		best.build(newDat, newCat, newWeight)
 		for i in range(self.data.shape[0]):
 			for j in range(self.data.shape[1]):
 				new = Node(depth-1)
@@ -52,7 +55,8 @@ def Node:
 				newThreshold self.data[i,j]
 				newDat = self.data[self.data[j]>newThreshold])
 				newCat = self.categories[self.data[j]>newThreshold])
-				new.build(newDat, newCat)
+				newWeight = self.weighs[self.data[j]>newThreshold])
+				new.build(newDat, newCat, newWeight)
 				if new.entropy<best.entropy:
 					best = new
 					bestThreshold = newThreshold
@@ -64,7 +68,8 @@ def Node:
 		self.left = Node(depth-1)
 		leftDat = self.data[self.data[self.feature]<self.threshold])
 		leftCat = self.categories[self.data[self.feature]<self.threshold])
-		self.left.build(leftDat, leftCat)
+		leftWeight = self.weights[self.data[self.feature]<self.threshold])
+		self.left.build(leftDat, leftCat, leftWeight)
 		self.left.split()
 	
 	#go through all the nodes bottom-up and relace redundant subtrees with leaf nodes
