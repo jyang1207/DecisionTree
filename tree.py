@@ -4,14 +4,14 @@ import data
 
 class Tree:
 
-	def __init__(self, dataObj=None, categories=None, depth=20, weights = None):
+	def __init__(self, dataObj=None, categories=None, depth=20, weights = None, z=0):
 		
 		self.dataObj = dataObj
 		self.depth = depth
 		
 		self.root = None
 		if self.dataObj != None:
-			self.build(dataObj, categories, weights, depth)
+			self.build(dataObj, categories, weights, depth, z)
 			
 			
 	# build a decision tree using the training data set
