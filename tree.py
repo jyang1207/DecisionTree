@@ -18,7 +18,7 @@ class Tree:
 	def build(self, train_data, categories, weights, depth, z):
 		self.root = Node.Node(depth, z)
 		if weights is None:
-			weights= np.one_like(categories)
+			weights= np.ones_like(categories)
 		self.root.build(train_data.get_data(train_data.get_headers()), categories, weights)
 		self.root.split()
 	
