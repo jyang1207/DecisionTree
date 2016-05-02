@@ -36,9 +36,19 @@ class forest:
 		cats = np.matrix(np.zeros(shape=(dataMatrix.shape[0], 1)))
 		unique, mapping = np.unique(np.array(categories), return_inverse = True)
 		forest_cats = np.matrix(np.zeros(shape=(dataMatrix.shape[0], len(self.trees)))
-		votes = []
-		for i in range(len(unique)):
-			votes.append(0)
+		votes = np.matrix(np.zeros(shape=(dataMatrix.shape[0], len(unique))))
 		for t in range(len(self.trees)):
 			tree_cats = self.trees[t].classify(dataMatrix)
 			forest_cats[:, t] = tree_cats
+		for i in range(dataMatrix.shape[0]):
+			for j in range(len(self.trees)):
+				votes[i, mapping[forest_cats[i, j]]] += 1
+			cat = 0
+			count = 0
+			for k in range(len(unique)):
+				if votes[i, k] > count:
+					count = votes[i, k]
+					cat = unique[k]
+			cats[i, 0] = cat
+		return cat
+		
