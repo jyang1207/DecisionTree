@@ -21,9 +21,9 @@ class forest:
 			cats = tree.classify(train_data)
 			for j in range(len(weights)):
 				if cats[i] == self.categories:
-					weights[i] -= 0.25
+					weights[i] *= -1.25
 				else:
-					weights[i] += 0.25
+					weights[i] *= 1.25
 		
 	def classify(self, dataMatrix):
 		cats = 
