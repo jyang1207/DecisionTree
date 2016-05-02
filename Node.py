@@ -56,7 +56,7 @@ def Node:
 				newThreshold self.data[i,j]
 				newDat = self.data[self.data[j]>newThreshold])
 				newCat = self.categories[self.data[j]>newThreshold])
-				newWeight = self.weighs[self.data[j]>newThreshold])
+				newWeight = self.weights[self.data[j]>newThreshold])
 				new.build(newDat, newCat, newWeight)
 				if new.entropy<best.entropy:
 					best = new
