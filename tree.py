@@ -30,8 +30,8 @@ class Tree:
 	def classify(self, data):
 		cats = np.matrix(np.zeros(shape = (data.shape[0], 1)))
 		for i in range(data.shape[0]):
-			class = self.root.classify(data[i, :])
-			cats[i, 0] = class
+			cat = self.root.classify(data[i, :])
+			cats[i, 0] = cat
 		return cats
 	
 	# test the tree 
