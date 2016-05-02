@@ -2,7 +2,8 @@ import numpy as np
 
 def Node:
 	#feature is an int
-	def __init__(self, depth):
+	def __init__(self, depth, z):
+		self.z = z
 		self.right = None
 		self.left = None
 		self.feature = None
@@ -13,7 +14,7 @@ def Node:
 		self.depth = depth
 	
 	#set the data and categories of the node and calculate entropy and error
-	def build(self, dataMatrix, categories, weights, z):
+	def build(self, dataMatrix, categories, weights):
 		self.data = dataMatrix
 		self.categories = categories
 		self.weights = weights
@@ -32,16 +33,16 @@ def Node:
 		#calculate error
 		f = (np.sum(self.classCounts) - np.max(self.classCounts))/np.sum(self.classCounts)
 		N = dataMatrix.shape[0]
-		self.error = f + z*z/(2*N)
-		self.error = self.error + z*np.sqrt(f/N - f*f/N + z*z/4/N/N)
-		self.error = self.error/(1 + z*z/N)
+		self.error = f + self.z*self.z/(2*N)
+		self.error = self.error + self.z*np.sqrt(f/N - f*f/N + self.z*self.z/4/N/N)
+		self.error = self.error/(1 + self.z*self.z/N)
 	
 	#calculate the optimal feature and threshold and split the data to two children nodes
 	def split(self):
 		if self.depth<0:
 			return
 		#have it create them one at a time instead of all of them and only storing the "best one"
-		best = Node(depth-1)
+		best = Node(depth-1, self.z)
 		bestFeature = 0
 		bestThreshold = self.data[bestFeature,0]
 		newDat = self.data[self.data[0]>bestThreshold])
@@ -50,7 +51,7 @@ def Node:
 		best.build(newDat, newCat, newWeight)
 		for i in range(self.data.shape[0]):
 			for j in range(self.data.shape[1]):
-				new = Node(depth-1)
+				new = Node(depth-1, self.z)
 				newFeature = j
 				newThreshold self.data[i,j]
 				newDat = self.data[self.data[j]>newThreshold])
@@ -65,7 +66,7 @@ def Node:
 		self.feature = newFeature
 		self.right = best
 		self.right.split()
-		self.left = Node(depth-1)
+		self.left = Node(depth-1,self.z)
 		leftDat = self.data[self.data[self.feature]<self.threshold])
 		leftCat = self.categories[self.data[self.feature]<self.threshold])
 		leftWeight = self.weights[self.data[self.feature]<self.threshold])
