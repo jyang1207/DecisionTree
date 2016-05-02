@@ -12,7 +12,13 @@ class forest:
 	def build(self, train_data, numTrees, depth, z):
 		for i in range(numTrees):
 			tree = tree.Tree(self.dataObj, self.categories, depth)
+			#calculate weight
+			
 			tree.build(train_data, self.categories, weights, depth, z)
+			tree.prune()
 			self.trees.append(tree)
 		
 	def classify(self, dataMatrix):
+		cats = 
+		for tree in self.trees:
+			
