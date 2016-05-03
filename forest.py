@@ -1,5 +1,6 @@
 import tree
-importy numpy as np
+import numpy as np
+import analysis
 
 class forest:
 	
@@ -15,21 +16,39 @@ class forest:
 		if data_size != categories.shape[0]:
 			print "training data and categories have different sizes."
 			return
-		weights = np.ones_like(categories)
+		weights = np.matrix(np.ones(shape=(data_size, 1)))
+		ensemble = np.matrix(np.zeros(shape=(data_size, 1)))
 		correctCount = data_size
+		treeCount = 0
 		while correctCount > 0.5*data_size:
 			correctCount = 0
 			tree = tree.Tree(train_data, categories, depth, z)
 			tree.prune()
 			self.trees.append(tree)
+			treeCount += 1
 			cats = tree.classify(train_data)
 			#increase the weight of data points that the previous tree classifies incorrectly
+			weights *= 1/data_size
+			#calculate error
+			E = np.exp(-np.multiply(self.categories, cats))
+			error = np.sum(np.multiply(weights, E), axis=0)
+			a = 0.5*np.log((1 - error)/error)
+			#add to ensemble
+			if ensemble.shape[1] == 1:
+				ensemble[:, 0] = a*cats
+			else:
+				ensemble = np.hstack((ensemble, ensemble[;, -1] + a*cats))
+			#update weights
+			weights = np.multiply(weights, np.exp(-np.multiply(self.categories, cats)*a))
+			weights = analysis.normalize_column_separately(weights)
+			'''
 			for j in range(len(weights)):
 				if cats[i] == self.categories:
 					weights[i] *= 0.75
 					correctCount += 1
 				else:
 					weights[i] *= 1.25
+			'''
 	
 	#classify a given data set and return a matrix of categories	
 	def classify(self, dataMatrix):
