@@ -10,6 +10,8 @@ import analysis as an
 import numpy as np
 import scipy.cluster.vq as vq
 import time
+import tree
+import forrest
 
 class Classifier:
 
@@ -71,8 +73,47 @@ class Classifier:
 		'''Converts a classifier object to a string.  Prints out the type.'''
 		return str(self._type)
 
+class DecisionTreeClassifier(Classifier):
+	
+	def __init__(self, dataObj = None, headers = [], categories = None):
+		Classifier.__init__(self, 'Decision Tree Classifier')
+		self.headers = headers
+		self.categories = categories
+		self.num_classes = 0
+		self.class_labels = None
+		if dataObj is not None:
+			self.build(dataObj, categories)
+	
+	def build(self, dataObj, categories):
+		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
+		self.num_classes = self.class_labels.shape[0]
+		self.tree = tree.Tree(dataObj, categories)
+		self.tree.prune()
+	
+	def classify(self, A):
+		return self.tree.classify(A)
+		
 
+class ForrestClassifier(Classifier):
+	
+	def __init__(self, dataObj = None, headers = [], categories = None):
+		Classifier.__init__(self, 'ForrestClassifier')
+		self.headers = headers
+		self.categories = categories
+		self.num_classes = 0
+		self.class_labels = None
+		if dataObj is not None:
+			self.build(dataObj, categories)
+			
+	def build(self, dataObj, categories):
+		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
+		self.num_classes = self.class_labels.shape[0]
+		self.forest = forest.Forest(dataObj, categories)
+	
+	def classify(self, A):
+		return self.forest.classify(A)
 
+		
 class NaiveBayes(Classifier):
 	'''NaiveBayes implements a simple NaiveBayes classifier using a
 	Gaussian distribution as the pdf.
