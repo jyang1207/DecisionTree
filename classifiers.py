@@ -117,6 +117,7 @@ class ForestClassifier(Classifier):
 	def cross_validation(self, categories, headers, k):
 		dobj = self.forest.dataObj
 		n = int(dobj.get_raw_num_rows()/k)
+		cmatrices = []
 		for i in range(k):
 			train = dobj.get_data(headers, rows=range(i*n))
 			train = np.vstack((train, dobj.get_data(headers, rows=range(i*n + n, k*n))))
@@ -127,6 +128,11 @@ class ForestClassifier(Classifier):
 			f = forest.Forest(train_cats)
 			f.build(train, train_cats)
 			results = f.classify(test, test_cats)
+			cmatrices.append(self.confusion_matrix(test_cats, results))
+		for cm in cmatrices:
+			print self.confusion_matrix_str(cm)
+		
+		return cmatrices
 
 		
 class NaiveBayes(Classifier):
