@@ -4,7 +4,7 @@ import analysis
 
 class forest:
 	#initializes a forest, sets z to 1.96 a .95 confidence interval if it is not given
-	def __init__(self, dataObj=None, categories=None, trees=[], z=1.96):
+	def __init__(self, dataObj=None, categories=None, depth=20, trees=[], z=1.96):
 		self.trees = trees
 		self.dataObj = dataObj
 		if self.dataObj != None and categories != None:
@@ -12,7 +12,7 @@ class forest:
 			self.build(A, categories, depth, z)
 	
 	#use Adaboost to build a forest with given depth of trees	
-	def build(self, train_data, categories, depth, z):
+	def build(self, train_data, categories, depth=20, z=1.96):
 		data_size = train_data.shape[0]
 		if data_size != categories.shape[0]:
 			print "training data and categories have different sizes."
