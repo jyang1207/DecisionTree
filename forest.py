@@ -3,8 +3,8 @@ import numpy as np
 import analysis
 
 class forest:
-	
-	def __init__(self, dataObj=None, categories=None, trees=[], z=0):
+	#initializes a forest, sets z to 1.96 a .95 confidence interval if it is not given
+	def __init__(self, dataObj=None, categories=None, trees=[], z=1.96):
 		self.trees = trees
 		self.dataObj = dataObj
 		if self.dataObj != None and categories != None:
