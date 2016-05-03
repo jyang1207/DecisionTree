@@ -38,7 +38,7 @@ class forest:
 			if ensemble.shape[1] == 1:
 				ensemble[:, 0] = a*cats
 			else:
-				ensemble = np.hstack((ensemble, ensemble[;, -1] + a*cats))
+				ensemble = np.hstack((ensemble, ensemble[:, -1] + a*cats))
 			#update weights
 			weights = np.multiply(weights, np.exp(-np.multiply(self.categories, cats)*a))
 			#normalize weights
@@ -60,7 +60,7 @@ class forest:
 	def classify(self, dataMatrix):
 		cats = np.matrix(np.zeros(shape=(dataMatrix.shape[0], 1)))
 		unique, mapping = np.unique(np.array(categories), return_inverse = True)
-		forest_cats = np.matrix(np.zeros(shape=(dataMatrix.shape[0], len(self.trees)))
+		forest_cats = np.matrix(np.zeros(shape=(dataMatrix.shape[0], len(self.trees))))
 		votes = np.matrix(np.zeros(shape=(dataMatrix.shape[0], len(unique))))
 		for t in range(len(self.trees)):
 			tree_cats = self.trees[t].classify(dataMatrix)
