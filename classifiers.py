@@ -11,7 +11,7 @@ import numpy as np
 import scipy.cluster.vq as vq
 import time
 import tree
-import forrest
+import forest
 
 class Classifier:
 
@@ -94,7 +94,7 @@ class DecisionTreeClassifier(Classifier):
 		return self.tree.classify(A)
 		
 
-class ForrestClassifier(Classifier):
+class ForestClassifier(Classifier):
 	
 	def __init__(self, dataObj = None, headers = [], categories = None):
 		Classifier.__init__(self, 'ForrestClassifier')
@@ -112,6 +112,21 @@ class ForrestClassifier(Classifier):
 	
 	def classify(self, A):
 		return self.forest.classify(A)
+		
+	#use k-fold cross validation to test the forest
+	def cross_validation(self, categories, headers, k):
+		dobj = self.forest.dataObj
+		n = int(dobj.get_raw_num_rows()/k)
+		for i in range(k):
+			train = dobj.get_data(headers, rows=range(i*n))
+			train = np.vstack((train, dobj.get_data(headers, rows=range(i*n + n, k*n))))
+			train_cats = categories[range(i*n), 0]
+			train_cats = np.vstack((train_cats, categories[range(i*n + n, k*n), 0]))
+			test = dobj.get_data(headers, rows=range(i*n, i*n + n))
+			test_cats = categories[range(i*n, i*n + n)]
+			f = forest.Forest(train_cats)
+			f.build(train, train_cats)
+			results = f.classify(test, test_cats)
 
 		
 class NaiveBayes(Classifier):
