@@ -7,7 +7,7 @@ class forest:
 	def __init__(self, dataObj=None, categories=None, trees=[], z=0):
 		self.trees = trees
 		self.dataObj = dataObj
-		if self.dataObj != None:
+		if self.dataObj != None and categories != None:
 			self.build(dataObj, categories, depth, z)
 	
 	#use Adaboost to build a forest with given depth of trees	
@@ -40,7 +40,12 @@ class forest:
 				ensemble = np.hstack((ensemble, ensemble[;, -1] + a*cats))
 			#update weights
 			weights = np.multiply(weights, np.exp(-np.multiply(self.categories, cats)*a))
-			weights = analysis.normalize_column_separately(weights)
+			#normalize weights
+			m = np.min(weights)
+			M = np.max(weights)
+			for i in range(data_size):
+				weights[i, 0] -= m
+				weights[i, 0] *= 1/(M - m)
 			'''
 			for j in range(len(weights)):
 				if cats[i] == self.categories:
@@ -71,3 +76,11 @@ class forest:
 			cats[i, 0] = cat
 		return cat
 		
+	#use k-fold cross validation to test the forest
+	def test(self, headers, k):
+		n = int(self.dataObj.get_raw_num_rows()/k)
+		for i in range(k):
+			train = self.dataObj.get_data(headers, rows=range(i*n))
+			train = np.vstack((train, self.dataObj.get_data(headers, rows=range(i*n + n, k*n))))
+			test = self.dataObj.get_data(headers, rows=range(i*n, i*n + n))
+			self.build
