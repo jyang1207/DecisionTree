@@ -8,11 +8,12 @@ class forest:
 		self.trees = trees
 		self.dataObj = dataObj
 		if self.dataObj != None and categories != None:
-			self.build(dataObj, categories, depth, z)
+			A = dataObj.get_data(dataObj.get_headers())
+			self.build(A, categories, depth, z)
 	
 	#use Adaboost to build a forest with given depth of trees	
 	def build(self, train_data, categories, depth, z):
-		data_size = train_data.get_raw_num_rows()
+		data_size = train_data.shape[0]
 		if data_size != categories.shape[0]:
 			print "training data and categories have different sizes."
 			return
@@ -77,10 +78,10 @@ class forest:
 		return cat
 		
 	#use k-fold cross validation to test the forest
-	def test(self, headers, k):
+	def test(self, categories, headers, k):
 		n = int(self.dataObj.get_raw_num_rows()/k)
 		for i in range(k):
 			train = self.dataObj.get_data(headers, rows=range(i*n))
 			train = np.vstack((train, self.dataObj.get_data(headers, rows=range(i*n + n, k*n))))
 			test = self.dataObj.get_data(headers, rows=range(i*n, i*n + n))
-			self.build
+			forest = Forest(categories)
