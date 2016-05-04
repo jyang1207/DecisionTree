@@ -46,12 +46,12 @@ def main(argv):
 		exit(-1)
 	
 	print 'making training data'
-	trainclass = classifiers.DecisionTreeClassifier(train, traincat)
+	trainclass = classifiers.DecisionTreeClassifier(train, train.get_headers(), traincat)
 	print 'classifying training data'
 	predtraincats = trainclass.classify(train.get_data(train.get_headers()))
 	
 	print 'making testing data'
-	testclass = classifiers.DecisionTreeClassifier(test, testcat)
+	testclass = classifiers.DecisionTreeClassifier(test, test.get_headers(), testcat)
 	print 'classifying testing data'
 	predtestcats = testclass.classify(test.get_data(test.get_headers()))
 	
