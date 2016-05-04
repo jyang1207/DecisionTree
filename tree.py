@@ -18,8 +18,9 @@ class Tree:
 	def build(self, train_data, categories, weights, depth, z):
 		self.root = Node.Node(depth, z)
 		if weights is None:
-			weights= np.ones_like(categories)
-		self.root.build(train_data.get_data(train_data.get_headers()), categories, weights)
+			weights = np.ones_like(categories)
+		unique, mapping = np.unique( np.array(categories.T), return_inverse = True)
+		self.root.build(train_data.get_data(train_data.get_headers()), mapping, weights, unique)
 		self.root.split()
 	
 	# prune the tree so that the information gain of children nodes are larger than the parent one
@@ -34,5 +35,9 @@ class Tree:
 			cats[i, 0] = cat
 		return cats
 	
+	def __str__(self):
+		print 'work in progress'
+	
 	# test the tree 
 	def test(self):
+		pass
