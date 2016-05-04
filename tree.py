@@ -4,7 +4,7 @@ import data
 
 class Tree:
 
-	def __init__(self, dataObj=None, categories=None, depth=20, weights = None, z=0):
+	def __init__(self, dataObj=None, categories=None, depth=20, z=0, weights = None):
 		
 		self.dataObj = dataObj
 		self.depth = depth
