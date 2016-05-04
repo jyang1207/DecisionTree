@@ -115,11 +115,19 @@ class ForestClassifier(Classifier):
 		
 	#use k-fold cross validation to test the forest
 	def cross_validation(self, categories, headers, k):
+		print 'k', k
 		dobj = self.forest.dataObj
+		print dobj
 		n = int(dobj.get_raw_num_rows()/k)
+		print 'n', n
 		cmatrices = []
 		for i in range(k):
+			i += 1
+			print i
+			print range(i*n)
 			train = dobj.get_data(headers, rows=range(i*n))
+			print train
+			print dobj.get_data(headers, rows=range(i*n + n, k*n)).shape
 			train = np.vstack((train, dobj.get_data(headers, rows=range(i*n + n, k*n))))
 			train_cats = categories[range(i*n), 0]
 			train_cats = np.vstack((train_cats, categories[range(i*n + n, k*n), 0]))
