@@ -2,7 +2,7 @@ import tree
 import numpy as np
 import analysis
 
-class forest:
+class Forest:
 	#initializes a forest, sets z to 1.96 a .95 confidence interval if it is not given
 	def __init__(self, dataObj=None, categories=None, depth=20, trees=[], z=1.96):
 		self.trees = trees
@@ -23,9 +23,9 @@ class forest:
 		treeCount = 0
 		while correctCount > 0.5*data_size:
 			correctCount = 0
-			tree = tree.Tree(train_data, categories, depth, z)
-			tree.prune()
-			self.trees.append(tree)
+			t = tree.Tree(self.dataObj, categories, depth, z)
+			t.prune()
+			self.trees.append(t)
 			treeCount += 1
 			cats = tree.classify(train_data)
 			#increase the weight of data points that the previous tree classifies incorrectly
