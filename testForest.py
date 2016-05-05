@@ -29,7 +29,7 @@ def main(argv):
 		exit(-1)
 		
 	try:
-		k = argv[3]
+		k = (int)(argv[3])
 	except:
 		print 'No k input'
 		exit(-1)
@@ -38,7 +38,7 @@ def main(argv):
 	classifier = classifiers.ForestClassifier(dataObj.get_data(dataObj.get_headers()), cat)
 	
 	print 'performing k-fold cross validation of the given data set'
-	classifier.cross_validation(cat, range(dataObj.get_num_headers()), k)
+	classifier.cross_validation(dataObj.get_data(dataObj.get_headers()), cat, range(dataObj.get_num_columns()), k)
 	
 	
 if __name__ == "__main__":
