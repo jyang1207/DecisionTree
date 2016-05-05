@@ -6,7 +6,6 @@
 #if any row starts with # treat is as a comment
 #numeric data stored in numpy matrix as float
 import csv
-import xml.etree.ElementTree as ET
 import numpy as np
 import time
 
@@ -38,38 +37,6 @@ class Data:
 					self.raw_data.append(row)
 			print "time to make raw data", time.time()-begin
 			begin = time.time()
-		#this is specific to the format of the XML tree that I am using but can be easily modified for any tree
-		#since my file does not have types I will manually put in the types for this file here, since I'm not 100% sure
-		#how to write in types correctly in xml doccuments
-		#however, all of the values except the first are numeric values, while the first I'm calling an enum since 
-		#it is zip code data so it should not be treated as numeric
-		elif filename.lower().endswith('.xml'):
-			tree = ET.parse(fp)
-			root = tree.getroot()
-			row = []
-			for node in tree.iter():
-				if node.attrib == {}:
-					if node.tag not in self.raw_headers and node.tag != 'response' and node.tag != 'row':
-						self.raw_headers.append(node.tag)
-						if node.tag == 'jurisdiction_name':
-							self.raw_types.append('enum')
-						else:
-							self.raw_types.append('numeric')
-					if node.text is not None:
-						row.append(node.text)
-					#print row
-				else:
-					if row != []:
-						hasValues = False
-						for value in row[1:]:
-							if value != '0':
-								hasValues = True
-						if hasValues:
-							self.raw_data.append(row)
-						else:
-							pass
-							#print 'deleting empty row'
-					row = [] 
 			
 		for i in range(len(self.raw_headers)):
 			key = self.raw_headers[i]
