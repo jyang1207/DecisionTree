@@ -35,10 +35,10 @@ def main(argv):
 		exit(-1)
 	
 	print 'building forest classifier'
-	classifier = classifiers.ForestClassifier(dataObj, dataObj.get_headers(), cat)
+	classifier = classifiers.ForestClassifier(dataObj.get_data(dataObj.get_headers()), cat)
 	
 	print 'performing k-fold cross validation of the given data set'
-	classifier.cross_validation(cat, dataObj.get_headers(), k)
+	classifier.cross_validation(cat, range(dataObj.get_num_headers()), k)
 	
 	
 if __name__ == "__main__":
