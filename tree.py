@@ -39,7 +39,7 @@ class Tree:
 	def test(self):
 		pass
 
-class randomTree(tree):
+class randomTree(Tree):
 	def __init__(self, dataMatrix=None, categories=None, numFeatures=5, depth=20, z=1.96, weights = None):
 		self.dataMatrix = dataMatrix
 		self.depth = depth
