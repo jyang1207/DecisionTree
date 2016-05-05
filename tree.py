@@ -35,9 +35,6 @@ class Tree:
 			cats[i, 0] = cat
 		return cats
 	
-	def __str__(self):
-		print 'work in progress'
-	
 	# test the tree 
 	def test(self):
 		pass
