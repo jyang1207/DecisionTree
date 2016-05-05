@@ -20,7 +20,7 @@ class Tree:
 		if weights is None:
 			weights = np.ones_like(categories)
 		unique, mapping = np.unique( np.array(categories.T), return_inverse = True)
-		self.root.build(dataMatrix, mapping, weights, unique)
+		self.root.build(train_data, mapping, weights, unique)
 		self.root.split()
 	
 	# prune the tree so that the information gain of children nodes are larger than the parent one
