@@ -70,7 +70,7 @@ class Node:
 		while bestThreshold == maximum[features[startFeature]] or bestThreshold == minimum[features[startFeature]]:
 			startFeature = random.choice(features)
 			startRow = np.random.randint(self.data.shape[0])
-			bestThreshold = self.data[feautres[startRow], features[startFeature]]
+			bestThreshold = self.data[features[startRow], features[startFeature]]
 			rightDat = self.data[self.data[:,features[startFeature]]>bestThreshold]
 			rightCat = self.categories[self.data[:,features[startFeature]]>bestThreshold]
 			rightWeight = self.weights[self.data[:,features[startFeature]]>bestThreshold]
