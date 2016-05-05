@@ -56,13 +56,13 @@ class Node:
 		startFeature = 0
 		startRow = 0
 		bestThreshold = self.data[features[startRow], features[startFeature]]
-		rightDat = self.data[self.data[:,features[startFeature]]>features[bestThreshold]]
-		rightCat = self.categories[self.data[:,features[startFeature]]>features[bestThreshold]]
-		rightWeight = self.weights[self.data[:,features[startFeature]]>features[bestThreshold]]
+		rightDat = self.data[self.data[:,features[startFeature]]>bestThreshold]
+		rightCat = self.categories[self.data[:,features[startFeature]]>bestThreshold]
+		rightWeight = self.weights[self.data[:,features[startFeature]]>bestThreshold]
 		
-		leftDat = self.data[self.data[:,features[startFeature]]<features[bestThreshold]]
-		leftCat = self.categories[self.data[:,features[startFeature]]<features[bestThreshold]]
-		leftWeight = self.weights[self.data[:,features[startFeature]]<features[bestThreshold]]
+		leftDat = self.data[self.data[:,features[startFeature]]<bestThreshold]
+		leftCat = self.categories[self.data[:,features[startFeature]]<bestThreshold]
+		leftWeight = self.weights[self.data[:,features[startFeature]]<bestThreshold]
 		
 		
 		minimum = np.min(self.data, axis =0)
