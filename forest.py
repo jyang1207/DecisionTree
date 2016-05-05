@@ -30,7 +30,7 @@ class Forest:
 			#increase the weight of data points that the previous tree classifies incorrectly
 			weights *= 1/data_size
 			#calculate error
-			E = np.exp(-np.multiply(self.categories, cats))
+			E = np.exp(-np.multiply(categories, cats))
 			error = np.sum(np.multiply(weights, E), axis=0)
 			a = 0.5*np.log((1 - error)/error)
 			#add to ensemble
@@ -39,21 +39,13 @@ class Forest:
 			else:
 				ensemble = np.hstack((ensemble, ensemble[:, -1] + a*cats))
 			#update weights
-			weights = np.multiply(weights, np.exp(-np.multiply(self.categories, cats)*a))
+			weights = np.multiply(weights, np.exp(-np.multiply(categories, cats)*a))
 			#normalize weights
 			m = np.min(weights)
 			M = np.max(weights)
 			for i in range(data_size):
 				weights[i, 0] -= m
 				weights[i, 0] *= 1/(M - m)
-			'''
-			for j in range(len(weights)):
-				if cats[i] == self.categories:
-					weights[i] *= 0.75
-					correctCount += 1
-				else:
-					weights[i] *= 1.25
-			'''
 	
 	#classify a given data set and return a matrix of categories	
 	def classify(self, dataMatrix):
