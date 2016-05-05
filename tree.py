@@ -41,3 +41,22 @@ class Tree:
 	# test the tree 
 	def test(self):
 		pass
+
+class randomTree(tree):
+	def __init__(self, dataMatrix=None, categories=None, numFeatures=5, depth=20, z=1.96, weights = None):
+		self.dataMatrix = dataMatrix
+		self.depth = depth
+		
+		self.root = None
+		if self.dataMatrix != None:
+			self.build(dataMatrix, categories, numFeatures, weights, depth, z)
+			
+			
+	# build a decision tree using the training data set
+	def build(self, train_data, categories, numFeatures, weights, depth, z):
+		self.root = Node.Node(depth, z)
+		if weights is None:
+			weights = np.ones_like(categories)
+		unique, mapping = np.unique( np.array(categories.T), return_inverse = True)
+		self.root.build(train_data, mapping, weights, unique)
+		self.root.split(numFeatures)
