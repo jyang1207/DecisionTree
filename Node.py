@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 class Node:
 	#feature is an int
@@ -38,38 +39,45 @@ class Node:
 		self.error = self.error/(1 + self.z*self.z/N)
 	
 	#calculate the optimal feature and threshold and split the data to two children nodes
-	def split(self):
+	def split(self, num_features = None):
 		if self.depth<=0:
 			return
 		if self.data.shape[0] <=2:
 			return
+		if num_features is None:
+			features =range(self.data.shape[0])
+		else:
+			basefeatures = range(self.data.shape[0]
+			features = []
+			for i in range(num_features):
+				features.append(basefeatures.pop(np.random.randint(self.data.shape[0]- i)))
 		#have it create them one at a time instead of all of them and only storing the "best one"
 		best = [None, None]
 		startFeature = 0
 		startRow = 0
-		bestThreshold = self.data[startRow, startFeature]
-		rightDat = self.data[self.data[:,startFeature]>bestThreshold]
-		rightCat = self.categories[self.data[:,startFeature]>bestThreshold]
-		rightWeight = self.weights[self.data[:,startFeature]>bestThreshold]
+		bestThreshold = self.data[features[startRow], features[startFeature]]
+		rightDat = self.data[self.data[:,features[startFeature]]>features[bestThreshold]]
+		rightCat = self.categories[self.data[:,features[startFeature]]>features[bestThreshold]]
+		rightWeight = self.weights[self.data[:,features[startFeature]]>features[bestThreshold]]
 		
-		leftDat = self.data[self.data[:,startFeature]<bestThreshold]
-		leftCat = self.categories[self.data[:,startFeature]<bestThreshold]
-		leftWeight = self.weights[self.data[:,startFeature]<bestThreshold]
+		leftDat = self.data[self.data[:,features[startFeature]]<features[bestThreshold]]
+		leftCat = self.categories[self.data[:,features[startFeature]]<features[bestThreshold]]
+		leftWeight = self.weights[self.data[:,features[startFeature]]<features[bestThreshold]]
 		
 		
 		minimum = np.min(self.data, axis =0)
 		maximum = np.max(self.data, axis = 0)
-		while bestThreshold == maximum[startFeature] or bestThreshold == minimum[startFeature]:
-			startFeature = np.random.randint(self.data.shape[1])
+		while bestThreshold == maximum[features[startFeature]] or bestThreshold == minimum[features[startFeature]]:
+			startFeature = random.choice(features)
 			startRow = np.random.randint(self.data.shape[0])
-			bestThreshold = self.data[startRow, startFeature]
-			rightDat = self.data[self.data[:,startFeature]>bestThreshold]
-			rightCat = self.categories[self.data[:,startFeature]>bestThreshold]
-			rightWeight = self.weights[self.data[:,startFeature]>bestThreshold]
+			bestThreshold = self.data[feautres[startRow], features[startFeature]]
+			rightDat = self.data[self.data[:,features[startFeature]]>bestThreshold]
+			rightCat = self.categories[self.data[:,features[startFeature]]>bestThreshold]
+			rightWeight = self.weights[self.data[:,features[startFeature]]>bestThreshold]
 					
-			leftDat = self.data[self.data[:,startFeature]<bestThreshold]
-			leftCat = self.categories[self.data[:,startFeature]<bestThreshold]
-			leftWeight = self.weights[self.data[:,startFeature]<bestThreshold]
+			leftDat = self.data[self.data[:,features[startFeature]]<bestThreshold]
+			leftCat = self.categories[self.data[:,features[startFeature]]<bestThreshold]
+			leftWeight = self.weights[self.data[:,features[startFeature]]<bestThreshold]
 		
 		bestFeature = startFeature
 		best[0] = Node(self.depth-1, self.z)
@@ -79,7 +87,7 @@ class Node:
 		best[1].build(leftDat, leftCat, leftCat, self.unique)
 		
 		for i in range(self.data.shape[0]):
-			for j in range(self.data.shape[1]):
+			for j in features:
 				right = Node(self.depth-1, self.z)
 				left = Node(self.depth-1, self.z)
 				newFeature = j
@@ -104,8 +112,8 @@ class Node:
 		self.threshold = bestThreshold
 		self.feature = newFeature
 		self.kids = best
-		self.kids[0].split()
-		self.kids[1].split()
+		self.kids[0].split(num_features = num_features)
+		self.kids[1].split(num_features = num_features)
 		
 	
 	#go through all the nodes bottom-up and relace redundant subtrees with leaf nodes
@@ -138,11 +146,5 @@ class Node:
 			return self.kids[0].classify(point)
 		else:
 			return self.kids[1].classify(point)
+
 	
-	def __str__(self):
-		#print self.classCounts
-		#if self.kids[1] is not None:
-		#	print self.kids[1]
-		#if self.kids[0] is not None:
-			#print self.kids[0]
-		print 'work in progress'
