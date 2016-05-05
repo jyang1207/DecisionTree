@@ -53,31 +53,31 @@ class Node:
 				features.append(basefeatures.pop(np.random.randint(self.data.shape[0]- i)))
 		#have it create them one at a time instead of all of them and only storing the "best one"
 		best = [None, None]
-		startFeature = 0
+		startFeature = features[0]
 		startRow = 0
-		bestThreshold = self.data[features[startRow], features[startFeature]]
-		rightDat = self.data[self.data[:,features[startFeature]]>bestThreshold]
-		rightCat = self.categories[self.data[:,features[startFeature]]>bestThreshold]
-		rightWeight = self.weights[self.data[:,features[startFeature]]>bestThreshold]
+		bestThreshold = self.data[startRow, startFeature]
+		rightDat = self.data[self.data[:,startFeature]>bestThreshold]
+		rightCat = self.categories[self.data[:,startFeature]>bestThreshold]
+		rightWeight = self.weights[self.data[:,startFeature]>bestThreshold]
 		
-		leftDat = self.data[self.data[:,features[startFeature]]<bestThreshold]
-		leftCat = self.categories[self.data[:,features[startFeature]]<bestThreshold]
-		leftWeight = self.weights[self.data[:,features[startFeature]]<bestThreshold]
+		leftDat = self.data[self.data[:,startFeature]<bestThreshold]
+		leftCat = self.categories[self.data[:,startFeature]<bestThreshold]
+		leftWeight = self.weights[self.data[:,startFeature]<bestThreshold]
 		
 		
 		minimum = np.min(self.data, axis =0)
 		maximum = np.max(self.data, axis = 0)
-		while bestThreshold == maximum[features[startFeature]] or bestThreshold == minimum[features[startFeature]]:
+		while bestThreshold == maximum[startFeature] or bestThreshold == minimum[startFeature]:
 			startFeature = random.choice(features)
 			startRow = np.random.randint(self.data.shape[0])
-			bestThreshold = self.data[features[startRow], features[startFeature]]
-			rightDat = self.data[self.data[:,features[startFeature]]>bestThreshold]
-			rightCat = self.categories[self.data[:,features[startFeature]]>bestThreshold]
-			rightWeight = self.weights[self.data[:,features[startFeature]]>bestThreshold]
+			bestThreshold = self.data[startRow, startFeature]
+			rightDat = self.data[self.data[:,startFeature]>bestThreshold]
+			rightCat = self.categories[self.data[:,startFeature]>bestThreshold]
+			rightWeight = self.weights[self.data[:,startFeature]>bestThreshold]
 					
-			leftDat = self.data[self.data[:,features[startFeature]]<bestThreshold]
-			leftCat = self.categories[self.data[:,features[startFeature]]<bestThreshold]
-			leftWeight = self.weights[self.data[:,features[startFeature]]<bestThreshold]
+			leftDat = self.data[self.data[:,startFeature]<bestThreshold]
+			leftCat = self.categories[self.data[:,startFeature]<bestThreshold]
+			leftWeight = self.weights[self.data[:,startFeature]<bestThreshold]
 		
 		bestFeature = startFeature
 		best[0] = Node(self.depth-1, self.z)
@@ -114,7 +114,7 @@ class Node:
 		self.kids = best
 		self.kids[0].split(num_features = num_features)
 		self.kids[1].split(num_features = num_features)
-		
+				
 	
 	#go through all the nodes bottom-up and relace redundant subtrees with leaf nodes
 	def prune(self):
