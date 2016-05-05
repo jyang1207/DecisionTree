@@ -80,7 +80,7 @@ class DecisionTreeClassifier(Classifier):
 		self.categories = categories
 		self.num_classes = 0
 		self.class_labels = None
-		if dataObj is not None:
+		if dataMatrix is not None:
 			self.build(dataMatrix, categories)
 	
 	def build(self, A, categories):
@@ -100,7 +100,7 @@ class ForestClassifier(Classifier):
 		self.categories = categories
 		self.num_classes = 0
 		self.class_labels = None
-		if dataObj is not None:
+		if dataMatrix is not None:
 			self.build(dataMatrix, categories)
 			
 	def build(self, A, categories):
