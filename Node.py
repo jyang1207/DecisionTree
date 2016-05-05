@@ -47,7 +47,7 @@ class Node:
 		if num_features is None:
 			features =range(self.data.shape[0])
 		else:
-			basefeatures = range(self.data.shape[0]
+			basefeatures = range(self.data.shape[0])
 			features = []
 			for i in range(num_features):
 				features.append(basefeatures.pop(np.random.randint(self.data.shape[0]- i)))
