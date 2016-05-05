@@ -2,8 +2,8 @@ import numpy as np
 import random
 
 class Node:
-	#feature is an int
-	index = 0
+	
+	#initializes a decision tree node with a given depth and a given z value
 	def __init__(self, depth, z):
 		self.z = z
 		self.kids = [None, None]
@@ -38,7 +38,8 @@ class Node:
 		self.error = self.error + self.z*np.sqrt(f/N - f*f/N + self.z*self.z/4/N/N)
 		self.error = self.error/(1 + self.z*self.z/N)
 	
-	#calculate the optimal feature and threshold and split the data to two children nodes
+	#calculate the optimal feature and threshold and split the data to two children nodes by checking every option
+	#if given a number of features it will check that number of random features, instead of all of them
 	def split(self, num_features = None):
 		if self.depth<=0:
 			return
@@ -51,23 +52,14 @@ class Node:
 			features = []
 			for i in range(num_features):
 				features.append(basefeatures.pop(np.random.randint(self.data.shape[0]- i)))
-		#have it create them one at a time instead of all of them and only storing the "best one"
 		best = [None, None]
 		startFeature = features[0]
 		startRow = 0
-		bestThreshold = self.data[startRow, startFeature]
-		rightDat = self.data[self.data[:,startFeature]>bestThreshold]
-		rightCat = self.categories[self.data[:,startFeature]>bestThreshold]
-		rightWeight = self.weights[self.data[:,startFeature]>bestThreshold]
-		
-		leftDat = self.data[self.data[:,startFeature]<bestThreshold]
-		leftCat = self.categories[self.data[:,startFeature]<bestThreshold]
-		leftWeight = self.weights[self.data[:,startFeature]<bestThreshold]
-		
 		
 		minimum = np.min(self.data, axis =0)
 		maximum = np.max(self.data, axis = 0)
-		while bestThreshold == maximum[startFeature] or bestThreshold == minimum[startFeature]:
+		
+		while True:
 			startFeature = random.choice(features)
 			startRow = np.random.randint(self.data.shape[0])
 			bestThreshold = self.data[startRow, startFeature]
@@ -78,7 +70,9 @@ class Node:
 			leftDat = self.data[self.data[:,startFeature]<bestThreshold]
 			leftCat = self.categories[self.data[:,startFeature]<bestThreshold]
 			leftWeight = self.weights[self.data[:,startFeature]<bestThreshold]
-		
+			
+			if  not(bestThreshold == maximum[startFeature] or bestThreshold == minimum[startFeature]):
+				break
 		bestFeature = startFeature
 		best[0] = Node(self.depth-1, self.z)
 		best[1] = Node(self.depth-1, self.z)
