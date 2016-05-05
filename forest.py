@@ -35,11 +35,11 @@ class Forest:
 			a = 0.5*np.log((1 - error)/error)
 			#add to ensemble
 			if ensemble.shape[1] == 1:
-				ensemble[:, 0] = a*cats
+				ensemble[:, 0] = a[0,0]*cats
 			else:
-				ensemble = np.hstack((ensemble, ensemble[:, -1] + a*cats))
+				ensemble = np.hstack((ensemble, ensemble[:, -1] + a[0,0]*cats))
 			#update weights
-			weights = np.multiply(weights, np.exp(-np.multiply(categories, cats)*a))
+			weights = np.multiply(weights, np.exp(-np.multiply(categories, cats)*a[0,0]))
 			#normalize weights
 			m = np.min(weights)
 			M = np.max(weights)
