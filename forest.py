@@ -4,12 +4,11 @@ import analysis
 
 class Forest:
 	#initializes a forest, sets z to 1.96 a .95 confidence interval if it is not given
-	def __init__(self, dataObj=None, categories=None, depth=20, trees=[], z=1.96):
+	def __init__(self, dataMatrix=None, categories=None, depth=20, trees=[], z=1.96):
 		self.trees = trees
-		self.dataObj = dataObj
-		if self.dataObj != None and categories != None:
-			A = dataObj.get_data(dataObj.get_headers())
-			self.build(A, categories, depth, z)
+		self.dataMatrix = dataMatrix
+		if self.dataMatrix != None and categories != None:
+			self.build(dataMatrix, categories, depth, z)
 	
 	#use Adaboost to build a forest with given depth of trees	
 	def build(self, train_data, categories, depth=20, z=1.96):
