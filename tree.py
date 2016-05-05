@@ -4,14 +4,14 @@ import data
 
 class Tree:
 
-	def __init__(self, dataObj=None, categories=None, depth=20, z=0, weights = None):
+	def __init__(self, dataMatrix=None, categories=None, depth=20, z=1.96, weights = None):
 		
-		self.dataObj = dataObj
+		self.dataMatrix = dataMatrix
 		self.depth = depth
 		
 		self.root = None
-		if self.dataObj != None:
-			self.build(dataObj, categories, weights, depth, z)
+		if self.dataMatrix != None:
+			self.build(dataMatrix, categories, weights, depth, z)
 			
 			
 	# build a decision tree using the training data set
@@ -20,7 +20,7 @@ class Tree:
 		if weights is None:
 			weights = np.ones_like(categories)
 		unique, mapping = np.unique( np.array(categories.T), return_inverse = True)
-		self.root.build(train_data.get_data(train_data.get_headers()), mapping, weights, unique)
+		self.root.build(dataMatrix, mapping, weights, unique)
 		self.root.split()
 	
 	# prune the tree so that the information gain of children nodes are larger than the parent one
