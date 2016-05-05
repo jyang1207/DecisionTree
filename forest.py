@@ -50,7 +50,7 @@ class Forest:
 	#classify a given data set and return a matrix of categories	
 	def classify(self, dataMatrix):
 		cats = np.matrix(np.zeros(shape=(dataMatrix.shape[0], 1)))
-		unique, mapping = np.unique(np.array(categories), return_inverse = True)
+		unique, mapping = np.unique(np.array(self.categories), return_inverse = True)
 		forest_cats = np.matrix(np.zeros(shape=(dataMatrix.shape[0], len(self.trees))))
 		votes = np.matrix(np.zeros(shape=(dataMatrix.shape[0], len(unique))))
 		for t in range(len(self.trees)):
