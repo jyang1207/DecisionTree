@@ -77,14 +77,13 @@ class DecisionTreeClassifier(Classifier):
 	
 	def __init__(self, dataObj = None, categories = None):
 		Classifier.__init__(self, 'Decision Tree Classifier')
-		self.headers = headers
 		self.categories = categories
 		self.num_classes = 0
 		self.class_labels = None
 		if dataObj is not None:
 			self.build(dataObj, categories)
 	
-	def build(self, dataObj, categories, headers):
+	def build(self, dataObj, categories):
 		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
 		self.num_classes = self.class_labels.shape[0]
 		A = dataObj.get_data(dataObj.get_headers())
@@ -99,7 +98,6 @@ class ForestClassifier(Classifier):
 	
 	def __init__(self, dataObj = None, categories = None):
 		Classifier.__init__(self, 'ForrestClassifier')
-		self.headers = headers
 		self.categories = categories
 		self.num_classes = 0
 		self.class_labels = None
