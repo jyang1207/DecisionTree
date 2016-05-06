@@ -115,19 +115,19 @@ class ForestClassifier(Classifier):
 	def cross_validation(self, dataMatrix, categories, headers, k):
 		n = int(dataMatrix.shape[0]/k)
 		cmatrices = []
+		temp_matrix = dataMatrix[:, headers]
 		for i in range(k):
-			i += 1
-			temp_matrix = dataMatrix[:, headers]
-			train = temp_matrix[range(i*n),:]
-			#train = dataMatrix[headers, range(i*n)]
-			temp_matrix = dataMatrix[:, headers]
-			temp_matrix = temp_matrix[range(i*n + n, k*n), :]
-			train = np.vstack((train, temp_matrix))
-			train_cats = categories[range(i*n), :]
-			train_cats = np.vstack((train_cats, categories[range(i*n + n, k*n), :]))
-			temp_matrix = dataMatrix[:, headers]
-			test = temp_matrix[range(i*n, min(i*n + n, dataMatrix.shape[0])),:]
-			test_cats = categories[range(i*n, min(i*n + n, dataMatrix.shape[0])), :]
+			if i == 0:
+				train = temp_matrix[range(i*n + n, k*n), :]
+				train_cats = categories[range(i*n + n, k*n), :]
+			else:
+				train = temp_matrix[range(i*n),:]
+				train2 = temp_matrix[range(i*n + n, k*n), :]
+				train = np.vstack((train, train2))
+				train_cats = categories[range(i*n), :]
+				train_cats = np.vstack((train_cats, categories[range(i*n + n, k*n), :]))
+			test = temp_matrix[range(i*n, i*n + n),:]
+			test_cats = categories[range(i*n, i*n + n), :]
 			f = forest.Forest(train, train_cats)
 			results = f.classify(test)
 			cmatrices.append(self.confusion_matrix(test_cats, results))
@@ -135,25 +135,37 @@ class ForestClassifier(Classifier):
 			print self.confusion_matrix_str(cm)
 		
 		return cmatrices
-	
-	def stratified_cross_validation(self, dataMatrix, categories, headers, k):
-		n = int(dataMatrix.shape[0]/k)
+		
+	#stratified k-fold cross validation where each class is distributed evenly to each fold
+	def stratified_cv(self, dataMatrix, categories, headers, k):
+		unique, mapping = np.unique(np.array(categories), return_inverse = True)
+		classIndices = []
+		for c in range(len(unique)):
+			classIndices.append([])
+		for m in range(categories.shape[0]):
+			classIndices[mapping[m]].append(m)
 		cmatrices = []
-		split_by_cats =[]
-		unique, categories = np.unique( np.array(categories.T), return_inverse = True)
-		for i in unique:
-			split_by_cats.append(self.data[cateogires == i])
-		folds = []
-		cat_folds = []
-		#I think I'm confusing myself and this may be way more complicated than it nees to be
+		temp_matrix = dataMatrix[:, headers]
 		for i in range(k):
-			folds.append
-		for i in range(k):
-			for i in range(dataMatrix.shape[0]/len(unique)):
-				for i in range(len(unique)):
-					if split_by_cats[i] != []
-						
-				
+			trainlist = []
+			testlist = []
+			for j in range(len(classIndices)):
+				n = int(len(classIndices[j])/k)
+				trainlist += classIndices[j][:i*n]
+				trainlist += classIndices[j][(i*n+n):]
+				testlist += classIndices[j][i*n : i*n+n]
+			train = temp_matrix[trainlist, :]
+			train_cats = categories[trainlist, :]
+			test = temp_matrix[testlist, :]
+			test_cats = categories[testlist, :]
+			f = forest.Forest(train, train_cats)
+			results = f.classify(test)
+			cmatrices.append(self.confusion_matrix(test_cats, results))
+		for cm in cmatrices:
+			print self.confusion_matrix_str(cm)
+		
+		return cmatrices
+		
 		
 class NaiveBayes(Classifier):
 	'''NaiveBayes implements a simple NaiveBayes classifier using a
