@@ -113,19 +113,24 @@ class ForestClassifier(Classifier):
 		
 	#use k-fold cross validation to test the forest
 	def cross_validation(self, dataMatrix, categories, headers, k):
-		print categories
 		n = int(dataMatrix.shape[0]/k)
+		print dataMatrix.shape[0]
 		cmatrices = []
 		for i in range(k):
 			i += 1
-			train = dataMatrix[headers, range(i*n)]
-			train = np.vstack((train, dataMatrix[headers, range(i*n + n, k*n)]))
+			temp_matrix = dataMatrix[:, headers]
+			train = temp_matrix[range(i*n),:]
+			#train = dataMatrix[headers, range(i*n)]
+			temp_matrix = dataMatrix[:, headers]
+			temp_matrix = temp_matrix[range(i*n + n, k*n), :]
+			train = np.vstack((train, temp_matrix))
 			train_cats = categories[range(i*n), :]
 			train_cats = np.vstack((train_cats, categories[range(i*n + n, k*n), :]))
-			test = dataMatrix[headers, range(i*n, i*n + n)]
-			test_cats = categories[range(i*n, i*n + n)]
+			temp_matrix = dataMatrix[:, headers]
+			test = temp_matrix[range(i*n, min(i*n + n, dataMatrix.shape[0])),:]
+			test_cats = categories[range(i*n, min(i*n + n, dataMatrix.shape[0])), :]
 			f = forest.Forest(train, train_cats)
-			results = f.classify(test, test_cats)
+			results = f.classify(test)
 			cmatrices.append(self.confusion_matrix(test_cats, results))
 		for cm in cmatrices:
 			print self.confusion_matrix_str(cm)

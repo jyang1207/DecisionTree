@@ -7,6 +7,7 @@ class Forest:
 	def __init__(self, dataMatrix=None, categories=None, depth=20, trees=[], z=1.96):
 		self.trees = trees
 		self.dataMatrix = dataMatrix
+		self.categories = categories
 		if self.dataMatrix != None and categories != None:
 			self.build(dataMatrix, categories, depth, z)
 	
@@ -22,11 +23,11 @@ class Forest:
 		treeCount = 0
 		while correctCount > 0.5*data_size:
 			correctCount = 0
-			t = tree.Tree(self.dataObj, categories, depth, z)
+			t = tree.Tree(train_data, categories, depth, z)
 			t.prune()
 			self.trees.append(t)
 			treeCount += 1
-			cats = tree.classify(train_data)
+			cats = t.classify(train_data)
 			#increase the weight of data points that the previous tree classifies incorrectly
 			weights *= 1/data_size
 			#calculate error
@@ -35,17 +36,18 @@ class Forest:
 			a = 0.5*np.log((1 - error)/error)
 			#add to ensemble
 			if ensemble.shape[1] == 1:
-				ensemble[:, 0] = a[0,0]*cats
+				ensemble[:, 0] = a[0, 0]*cats
 			else:
-				ensemble = np.hstack((ensemble, ensemble[:, -1] + a[0,0]*cats))
+				ensemble = np.hstack((ensemble, ensemble[:, -1] + a[0, 0]*cats))
 			#update weights
-			weights = np.multiply(weights, np.exp(-np.multiply(categories, cats)*a[0,0]))
+			weights = np.multiply(weights, np.exp(-np.multiply(categories, cats)*a[0, 0]))
 			#normalize weights
 			m = np.min(weights)
 			M = np.max(weights)
 			for i in range(data_size):
 				weights[i, 0] -= m
 				weights[i, 0] *= 1/(M - m)
+			
 	
 	#classify a given data set and return a matrix of categories	
 	def classify(self, dataMatrix):
@@ -58,7 +60,7 @@ class Forest:
 			forest_cats[:, t] = tree_cats
 		for i in range(dataMatrix.shape[0]):
 			for j in range(len(self.trees)):
-				votes[i, mapping[forest_cats[i, j]]] += 1
+				votes[i, int(forest_cats[i, j])] += 1
 			cat = 0
 			count = 0
 			for k in range(len(unique)):
@@ -66,7 +68,7 @@ class Forest:
 					count = votes[i, k]
 					cat = unique[k]
 			cats[i, 0] = cat
-		return cat
+		return cats
 		
 	#use k-fold cross validation to test the forest
 	def test(self, categories, headers, k):
