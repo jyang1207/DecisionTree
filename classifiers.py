@@ -114,7 +114,6 @@ class ForestClassifier(Classifier):
 	#use k-fold cross validation to test the forest
 	def cross_validation(self, dataMatrix, categories, headers, k):
 		n = int(dataMatrix.shape[0]/k)
-		print dataMatrix.shape[0]
 		cmatrices = []
 		for i in range(k):
 			i += 1
@@ -136,7 +135,20 @@ class ForestClassifier(Classifier):
 			print self.confusion_matrix_str(cm)
 		
 		return cmatrices
-
+	
+	def stratified_cross_validation(self, dataMatrix, categories, headers, k):
+		n = int(dataMatrix.shape[0]/k)
+		cmatrices = []
+		split_by_cats =[]
+		unique, categories = np.unique( np.array(categories.T), return_inverse = True)
+		for i in unique:
+			split_by_cats.append(self.data[cateogires == i])
+		for i in range(k):
+			for i in range(dataMatrix.shape[0]/len(unique)):
+				for i in range(len(unique)):
+					if split_by_cats[i] != []
+					#make this do the thing
+				
 		
 class NaiveBayes(Classifier):
 	'''NaiveBayes implements a simple NaiveBayes classifier using a
