@@ -69,12 +69,3 @@ class Forest:
 					cat = unique[k]
 			cats[i, 0] = cat
 		return cats
-		
-	#use k-fold cross validation to test the forest
-	def test(self, categories, headers, k):
-		n = int(self.dataObj.get_raw_num_rows()/k)
-		for i in range(k):
-			train = self.dataObj.get_data(headers, rows=range(i*n))
-			train = np.vstack((train, self.dataObj.get_data(headers, rows=range(i*n + n, k*n))))
-			test = self.dataObj.get_data(headers, rows=range(i*n, i*n + n))
-			forest = Forest(categories)
