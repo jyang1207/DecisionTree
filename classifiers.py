@@ -143,11 +143,16 @@ class ForestClassifier(Classifier):
 		unique, categories = np.unique( np.array(categories.T), return_inverse = True)
 		for i in unique:
 			split_by_cats.append(self.data[cateogires == i])
+		folds = []
+		cat_folds = []
+		#I think I'm confusing myself and this may be way more complicated than it nees to be
+		for i in range(k):
+			folds.append
 		for i in range(k):
 			for i in range(dataMatrix.shape[0]/len(unique)):
 				for i in range(len(unique)):
 					if split_by_cats[i] != []
-					#make this do the thing
+						
 				
 		
 class NaiveBayes(Classifier):
