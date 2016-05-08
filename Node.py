@@ -21,10 +21,9 @@ class Node:
 		self.data = dataMatrix
 		self.categories = categories
 		self.weights = weights
-		col = dataMatrix[:,self.feature]
 		self.classCounts = np.zeros(shape = len(unique))
 		for i in range(len(categories)):
-			self.classCounts[categories[i] == unique]+=weights[i]
+			self.classCounts[categories[i] == unique]+=weights[i,0]
 		p = []
 		for i in range(len(unique)):
 			p.append(self.classCounts[i]/dataMatrix.shape[0])
@@ -37,31 +36,31 @@ class Node:
 		self.error = f + self.z*self.z/(2*N)
 		self.error = self.error + self.z*np.sqrt(f/N - f*f/N + self.z*self.z/4/N/N)
 		self.error = self.error/(1 + self.z*self.z/N)
-	
+		
 	#calculate the optimal feature and threshold and split the data to two children nodes by checking every option
 	#if given a number of features it will check that number of random features, instead of all of them
 	def split(self, num_features = None):
 		if self.depth<=0:
 			return
-		if self.data.shape[0] <=2:
+		if self.data.shape[0] <=3:
 			return
-		if num_features is None:
+		if num_features is None or num_features >= self.data.shape[0]:
 			features =range(self.data.shape[1])
 		else:
 			basefeatures = range(self.data.shape[1])
 			features = []
-			for i in range(num_features):
-				features.append(basefeatures.pop(np.random.randint(self.data.shape[0]- i)))
+			for i in range(num_features-1):
+				features.append(basefeatures.pop(np.random.randint(self.data.shape[1]- i)))
 		best = [None, None]
 		startFeature = features[0]
 		startRow = 0
 		
 		minimum = np.min(self.data, axis =0)
 		maximum = np.max(self.data, axis = 0)
-		
 		while True:
 			startFeature = random.choice(features)
 			startRow = np.random.randint(self.data.shape[0])
+			#print startRow, startFeature
 			bestThreshold = self.data[startRow, startFeature]
 			rightDat = self.data[self.data[:,startFeature]>bestThreshold]
 			rightCat = self.categories[self.data[:,startFeature]>bestThreshold]
@@ -73,12 +72,13 @@ class Node:
 			
 			if  not(bestThreshold == maximum[startFeature] or bestThreshold == minimum[startFeature]):
 				break
+		
 		bestFeature = startFeature
 		best[0] = Node(self.depth-1, self.z)
 		best[1] = Node(self.depth-1, self.z)
 		
 		best[0].build(rightDat, rightCat, rightWeight, self.unique)
-		best[1].build(leftDat, leftCat, leftCat, self.unique)
+		best[1].build(leftDat, leftCat, leftWeight, self.unique)
 		
 		for i in range(self.data.shape[0]):
 			for j in features:
@@ -104,7 +104,8 @@ class Node:
 						bestFeature = newFeature
 						
 		self.threshold = bestThreshold
-		self.feature = newFeature
+		self.feature = bestFeature
+		print self.feature
 		self.kids = best
 		self.kids[0].split(num_features = num_features)
 		self.kids[1].split(num_features = num_features)
@@ -127,7 +128,7 @@ class Node:
 		if childerror>parerror:
 			self.kids[0] = None
 			self.kids[1] = None
-	
+		
 	#take in a data point and return its class
 	def classify(self, point):
 		if self.kids[0] is None:
