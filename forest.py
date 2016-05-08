@@ -33,7 +33,7 @@ class Forest:
 			treeCount += 1
 			cats = t.classify(train_data)
 			#increase the weight of data points that the previous tree classifies incorrectly
-			weights *= 1/data_size
+			weights *= 1.0/data_size
 			#calculate error
 			E = np.exp(-np.multiply(categories, cats))
 			error = np.sum(np.multiply(weights, E), axis=0)
