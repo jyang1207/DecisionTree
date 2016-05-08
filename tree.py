@@ -10,7 +10,7 @@ class Tree:
 		self.depth = depth
 		
 		self.root = None
-		if self.dataMatrix != None:
+		if self.dataMatrix is not None:
 			self.build(dataMatrix, categories, weights, depth, z)
 			
 			
@@ -18,7 +18,7 @@ class Tree:
 	def build(self, train_data, categories, weights, depth, z):
 		self.root = Node.Node(depth, z)
 		if weights is None:
-			weights = np.ones_like(categories)
+			weights = np.matrix(np.ones_like(categories))
 		unique, mapping = np.unique( np.array(categories.T), return_inverse = True)
 		self.root.build(train_data, mapping, weights, unique)
 		self.root.split()
