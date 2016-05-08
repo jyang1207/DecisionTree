@@ -1,3 +1,7 @@
+#file Node.py
+#Authors: Jason Gurevitch and Jianing Yang
+#date: 5/8/2016
+
 import sys
 import data
 import classifiers
