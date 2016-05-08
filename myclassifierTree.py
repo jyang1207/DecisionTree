@@ -46,26 +46,24 @@ def main(argv):
 		exit(-1)
 	
 	print 'making training data'
-	#trainclass = classifiers.DecisionTreeClassifier(train.get_data(train.get_headers()), traincat)
-	trainclass = classifiers.RandomTreeClassifier(train.get_data(train.get_headers()), traincat)
+	#classifier = classifiers.DecisionTreeClassifier(train.get_data(train.get_headers()), traincat)
+	classifier = classifiers.RandomTreeClassifier(train.get_data(train.get_headers()), traincat)
 	print 'classifying training data'
-	predtraincats = trainclass.classify(train.get_data(train.get_headers()))
+	predtraincats = classifier.classify(train.get_data(train.get_headers()))
 	
-	print 'making testing data'
-	testclass = classifiers.RandomTreeClassifier(test.get_data(test.get_headers()), testcat)
 	print 'classifying testing data'
-	predtestcats = testclass.classify(test.get_data(test.get_headers()))
+	predtestcats = classifier.classify(test.get_data(test.get_headers()))
 	
 	print 'training data'
-	print trainclass.confusion_matrix_str(trainclass.confusion_matrix(traincat,predtraincats))
+	print classifier.confusion_matrix_str(classifier.confusion_matrix(traincat,predtraincats))
 	
 	print 'test data'
-	print testclass.confusion_matrix_str(testclass.confusion_matrix(testcat, predtestcats))
+	print classifier.confusion_matrix_str(classifier.confusion_matrix(testcat, predtestcats))
 	
 	#print np.array(testcats.T).tolist()[0]
 	
-	test.add_column('categories', 'numeric', np.array(predtestcats.T).tolist()[0])
-	test.write('testing_data_PCA_w_cats')
+	#test.add_column('categories', 'numeric', np.array(predtestcats.T).tolist()[0])
+	#test.write('testing_data_PCA_w_cats')
 	
 if __name__ == "__main__":
 	main(sys.argv)		  
