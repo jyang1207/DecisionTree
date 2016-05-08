@@ -1,6 +1,10 @@
+#file Node.py
+#Authors: Jason Gurevitch and Jianing Yang
+#date: 5/8/2016
+
+
 import tree
 import numpy as np
-import analysis
 
 class Forest:
 	#initializes a forest, sets z to 1.96 a .95 confidence interval if it is not given
