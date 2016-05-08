@@ -28,15 +28,11 @@ class Data:
 		fp = file(filename, 'rU')
 		if filename.lower().endswith('.csv'):
 			creader = csv.reader(fp)
-			#print "time to read in", time.time()-begin
-			#begin = time.time()
 			self.raw_headers = creader.next()
 			self.raw_types = creader.next()
 			for row in creader:
 				if row != []:
 					self.raw_data.append(row)
-			#print "time to make raw data", time.time()-begin
-			#begin = time.time()
 			
 		for i in range(len(self.raw_headers)):
 			key = self.raw_headers[i]
@@ -45,14 +41,10 @@ class Data:
 		self.header2matrix = {} #new field
 		for i in range(self.get_num_columns()):
 			self.header2matrix[headers[i]] = i
-		#print "self.header2matrix"
-		#print self.header2matrix
 		self.matrix_data = np.zeros(shape =(self.get_raw_num_rows(), self.get_num_columns()),dtype = float)
 		for i in range(self.matrix_data.shape[0]):
 			for j in range(self.matrix_data.shape[1]):
 				
-				#if (i*self.get_num_columns()+j)%1000 == 0:
-				#	print i*self.get_num_columns()+j
 				header = headers[j]
 				matIndex = self.header2matrix[header] 
 				rawIndex = self.header2raw[header]
@@ -60,13 +52,11 @@ class Data:
 				try:
 					self.matrix_data[i,matIndex] = float(self.raw_data[i][rawIndex])
 				except:
-					#print 'adding empty value'
 					self.matrix_data[i,matIndex] = -9999
 				
 								
 		fp.close()
-		#print "time to make matrix", time.time()-begin
-	
+		
 	def write(self, filename = None):
 		if filename is None:
 			doc = file("Data.csv", 'wU')
@@ -148,11 +138,8 @@ class Data:
 	#adds -9999 to the end if there are empty values
 	#deletes values at the end if there are extra
 	def add_column(self, header, type, data_points):
-		#print len(data_points)
-		#print self.get_raw_num_rows()
 		if len(data_points)<self.get_raw_num_rows():
 			for i in range(self.get_raw_num_rows()-len(data_points)):
-				#print 'adding empty values'
 				data_points.append(-9999)
 		elif len(data_points)>self.get_raw_num_rows():
 			print 'cutting off last data points'
@@ -165,16 +152,11 @@ class Data:
 			self.raw_data[i].append(data_points[i])
 		if type == 'numeric':
 			self.header2matrix[header] = self.get_num_columns()-1
-			#print 'the thing'
 		numeric_data_points = []
 		for datum in data_points:
 			numeric_data_points.append(float(datum))
-		#print 'before adding col'
-		#print self.matrix_data
 		self.matrix_data = np.hstack((self.matrix_data, np.asmatrix(numeric_data_points).T))
-		#print 'after adding col'
-		#print self.matrix_data
-	
+		
 	#taken from lab2_test1 and expanded upon
 	def test(self):
 		print "\n Testing the fields and acessors for raw data\n"
@@ -209,12 +191,6 @@ class Data:
 		print self.get_num_columns()
 		print "self.get_row(0)"
 		print self.get_row(0)
-		#print "self.get_value(0, headers[1])"
-		#print self.get_value(0, headers[1])
-		#print "self.get_data([headers[0],headers[2]])"
-		#print self.get_data([headers[0], headers[2]])
-		#print "self.get_data([headers[0],headers[1]], [0,1,4,5])"
-		#print self.get_data([headers[0],headers[1]], [0,1,4,5])
 		
 			
 if __name__ == "__main__":
