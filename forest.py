@@ -25,9 +25,9 @@ class Forest:
 		while correctCount > 0.5*data_size:
 			correctCount = 0
 			if self.numFeatures == None:
-				t = tree.Tree(train_data, categories, depth, z)
+				t = tree.Tree(train_data, categories, depth, z, weights)
 			else:
-				t = tree.RandomTree(train_data, categories, depth, z, self.numFeatures)
+				t = tree.RandomTree(train_data, categories, self.numFeatures, depth, z, weights)
 			t.prune()
 			self.trees.append(t)
 			treeCount += 1
