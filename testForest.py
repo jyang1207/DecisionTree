@@ -38,8 +38,10 @@ def main(argv):
 	classifier = classifiers.ForestClassifier(dataObj.get_data(dataObj.get_headers()), cat)
 	
 	print 'performing k-fold cross validation of the given data set'
+	print 'regular'
 	classifier.cross_validation(dataObj.get_data(dataObj.get_headers()), cat, range(dataObj.get_num_columns()), k)
-	
+	print 'stratified'
+	classifier.stratified_cv(dataObj.get_data(dataObj.get_headers()), cat, range(dataObj.get_num_columns()), k)
 	
 if __name__ == "__main__":
 	main(sys.argv)		  
