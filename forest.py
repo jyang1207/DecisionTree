@@ -4,10 +4,11 @@ import analysis
 
 class Forest:
 	#initializes a forest, sets z to 1.96 a .95 confidence interval if it is not given
-	def __init__(self, dataMatrix=None, categories=None, depth=20, trees=[], z=1.96):
+	def __init__(self, dataMatrix=None, categories=None, depth=20, trees=[], z=1.96, numFeatures=None):
 		self.trees = trees
 		self.dataMatrix = dataMatrix
 		self.categories = categories
+		self.numFeatures = numFeatures
 		if self.dataMatrix != None and categories != None:
 			self.build(dataMatrix, categories, depth, z)
 	
@@ -23,7 +24,10 @@ class Forest:
 		treeCount = 0
 		while correctCount > 0.5*data_size:
 			correctCount = 0
-			t = tree.Tree(train_data, categories, depth, z)
+			if self.numFeatures == None:
+				t = tree.Tree(train_data, categories, depth, z)
+			else:
+				t = tree.RandomTree(train_data, categories, depth, z, self.numFeatures)
 			t.prune()
 			self.trees.append(t)
 			treeCount += 1
