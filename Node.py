@@ -116,12 +116,12 @@ class Node:
 		self.kids[0].prune()
 		self.kids[1].prune()
 		childerror = 0
-		for cat in self.kids[0].categories:
+		for cat in self.kids[0].classCounts:
 			childerror+= self.kids[0].error * cat
-		for cat in self.kids[1].categories:
+		for cat in self.kids[1].classCounts:
 			childerror+= self.kids[1].error * cat
 		parerror = 0
-		for cat in self.categories:
+		for cat in self.classCounts:
 			parerror += self.error*cat
 		if childerror>parerror:
 			self.kids[0] = None
