@@ -28,15 +28,15 @@ class Data:
 		fp = file(filename, 'rU')
 		if filename.lower().endswith('.csv'):
 			creader = csv.reader(fp)
-			print "time to read in", time.time()-begin
-			begin = time.time()
+			#print "time to read in", time.time()-begin
+			#begin = time.time()
 			self.raw_headers = creader.next()
 			self.raw_types = creader.next()
 			for row in creader:
 				if row != []:
 					self.raw_data.append(row)
-			print "time to make raw data", time.time()-begin
-			begin = time.time()
+			#print "time to make raw data", time.time()-begin
+			#begin = time.time()
 			
 		for i in range(len(self.raw_headers)):
 			key = self.raw_headers[i]
@@ -65,7 +65,7 @@ class Data:
 				
 								
 		fp.close()
-		print "time to make matrix", time.time()-begin
+		#print "time to make matrix", time.time()-begin
 	
 	def write(self, filename = None):
 		if filename is None:
