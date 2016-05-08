@@ -1,5 +1,6 @@
-#File Data.py
-#Author Jason Gurevitch
+#file Node.py
+#Authors: Jason Gurevitch and Jianing Yang
+#date: 5/8/2016
 
 
 #-9999 represents missing data
