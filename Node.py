@@ -60,7 +60,6 @@ class Node:
 		while True:
 			startFeature = random.choice(features)
 			startRow = np.random.randint(self.data.shape[0])
-			#print startRow, startFeature
 			bestThreshold = self.data[startRow, startFeature]
 			rightDat = self.data[self.data[:,startFeature]>bestThreshold]
 			rightCat = self.categories[self.data[:,startFeature]>bestThreshold]
@@ -105,7 +104,6 @@ class Node:
 						
 		self.threshold = bestThreshold
 		self.feature = bestFeature
-		print self.feature
 		self.kids = best
 		self.kids[0].split(num_features = num_features)
 		self.kids[1].split(num_features = num_features)
