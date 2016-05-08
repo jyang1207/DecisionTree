@@ -123,11 +123,12 @@ class ForestClassifier(Classifier):
 		self.class_labels = None
 		if dataMatrix is not None:
 			self.build(dataMatrix, categories, numFeatures)
-			
-	def build(self, A, categories):
-		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True, numFeatures= None)
+
+	def build(self, A, categories, numFeatures = None):
+		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
 		self.num_classes = self.class_labels.shape[0]
 		self.forest = forest.Forest(A, categories, numFeatures)
+	
 	
 	def classify(self, A):
 		return self.forest.classify(A)
