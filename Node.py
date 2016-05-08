@@ -44,7 +44,7 @@ class Node:
 			return
 		if self.data.shape[0] <=3:
 			return
-		if num_features is None or num_features >= self.data.shape[0]:
+		if num_features is None or num_features >= self.data.shape[1]:
 			features =range(self.data.shape[1])
 		else:
 			basefeatures = range(self.data.shape[1])
