@@ -116,16 +116,16 @@ class Node:
 		self.kids[0].prune()
 		self.kids[1].prune()
 		childerror = 0
-		for cat in self.kids[0].classCounts:
-			childerror+= self.kids[0].error * cat
-		for cat in self.kids[1].classCounts:
-			childerror+= self.kids[1].error * cat
+		for kid in self.kids:
+			for cat in kid.classCounts:
+				childerror+=kid.error*cat
 		parerror = 0
 		for cat in self.classCounts:
 			parerror += self.error*cat
 		if childerror>parerror:
 			self.kids[0] = None
 			self.kids[1] = None
+		
 		
 	#take in a data point and return its class
 	def classify(self, point):
