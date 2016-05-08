@@ -1,8 +1,7 @@
-# Template by Bruce Maxwell
-# Spring 2015
-# CS 251 Project 8
-#
-# Classifier class and child definitions
+#file Node.py
+#Authors: Jason Gurevitch and Jianing Yang
+#date: 5/8/2016
+
 
 import sys
 import data
