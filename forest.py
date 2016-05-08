@@ -9,7 +9,7 @@ class Forest:
 		self.dataMatrix = dataMatrix
 		self.categories = categories
 		self.numFeatures = numFeatures
-		if self.dataMatrix != None and categories != None:
+		if self.dataMatrix is not None and categories is not None:
 			self.build(dataMatrix, categories, depth, z)
 	
 	#use Adaboost to build a forest with given depth of trees	
