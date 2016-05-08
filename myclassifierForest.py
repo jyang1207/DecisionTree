@@ -48,20 +48,18 @@ def main(argv):
 		exit(-1)
 	
 	print 'making training data'
-	trainclass = classifiers.ForestClassifier(train, traincat)
+	classifier = classifiers.ForestClassifier(train, traincat)
 	print 'classifying training data'
-	predtraincats = trainclass.classify(train)
+	predtraincats = classifier.classify(train)
 	
-	print 'making testing data'
-	testclass = classifiers.ForestClassifier(test, testcat)
 	print 'classifying testing data'
-	predtestcats = testclass.classify(test)
+	predtestcats = classifier.classify(test)
 	
 	print 'training data'
-	print trainclass.confusion_matrix_str(trainclass.confusion_matrix(traincat,predtraincats))
+	print classifier.confusion_matrix_str(classifier.confusion_matrix(traincat,predtraincats))
 	
 	print 'test data'
-	print testclass.confusion_matrix_str(testclass.confusion_matrix(testcat, predtestcats))
+	print classifier.confusion_matrix_str(classifier.confusion_matrix(testcat, predtestcats))
 	
 	#print np.array(testcats.T).tolist()[0]
 	
