@@ -16,6 +16,8 @@ class Node:
 		self.unique = None
 	
 	#set the data and categories of the node and calculate entropy and error
+	#unique is passed to every node in a tree so that class counts always
+	#has the same shape, and that each class count is in the same place relative to the other nodes
 	def build(self, dataMatrix, categories, weights, unique):
 		self.unique = unique
 		self.data = dataMatrix
@@ -24,6 +26,7 @@ class Node:
 		self.classCounts = np.zeros(shape = len(unique))
 		for i in range(len(categories)):
 			self.classCounts[categories[i] == unique]+=weights[i,0]
+		#calcualte entropy
 		p = []
 		for i in range(len(unique)):
 			p.append(self.classCounts[i]/dataMatrix.shape[0])
@@ -40,10 +43,14 @@ class Node:
 	#calculate the optimal feature and threshold and split the data to two children nodes by checking every option
 	#if given a number of features it will check that number of random features, instead of all of them
 	def split(self, num_features = None):
+		#base case
 		if self.depth<=0:
 			return
+		#base case as to not create an infinate loop since if the data point chosen is the minimum there would be a node with no information, which crashes the program
+		#we chose 3 as an arbitrary number, but since there could be repeats we thought it was a good idea to not just say a smaller one, and we'd often get loops with lower ones
 		if self.data.shape[0] <=3:
 			return
+		#if the node is for a random tree or not
 		if num_features is None or num_features >= self.data.shape[1]:
 			features =range(self.data.shape[1])
 		else:
@@ -55,6 +62,7 @@ class Node:
 		startFeature = features[0]
 		startRow = 0
 		
+		#pick starting nodes that aren't the minimum or maximum
 		minimum = np.min(self.data, axis =0)
 		maximum = np.max(self.data, axis = 0)
 		for i in range(1000):
@@ -76,6 +84,7 @@ class Node:
 			print 'you were probably in an infinite loop due to the last few datapoints being the same so we saved you that trouble'
 			raise
 		
+		#build the starting nodes
 		bestFeature = startFeature
 		best[0] = Node(self.depth-1, self.z)
 		best[1] = Node(self.depth-1, self.z)
@@ -83,13 +92,14 @@ class Node:
 		best[0].build(rightDat, rightCat, rightWeight, self.unique)
 		best[1].build(leftDat, leftCat, leftWeight, self.unique)
 		
+		#find the best threshold to split by
 		for i in range(self.data.shape[0]):
 			for j in features:
 				right = Node(self.depth-1, self.z)
 				left = Node(self.depth-1, self.z)
 				newFeature = j
 				newThreshold=self.data[i,j]
-				if not(newThreshold == maximum[newFeature] or newThreshold == minimum[newFeature]):
+				if not(newThreshold == maximum[newFeature]):
 					
 					rightDat = self.data[self.data[:,j]>newThreshold]
 					rightCat = self.categories[self.data[:,j]>newThreshold]
