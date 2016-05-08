@@ -7,8 +7,6 @@ import data
 import classifiers
 import csv
 import numpy as np
-import analysis as an
-
 
 #read in data and categories
 #build classifier
