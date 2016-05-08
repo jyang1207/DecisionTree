@@ -36,13 +36,10 @@ class Classifier:
 		'''
 		
 		unique, mapping = np.unique(np.array(truecats), return_inverse = True)
-		#print unique
 		confMatrix = np.matrix(np.zeros(shape = (self.num_classes, self.num_classes)))
 		
 		for i in range(truecats.shape[0]):
-			#print int(classcats[i,0]),np.argwhere(unique == (truecats[i,0]))
 			confMatrix[int(classcats[i,0]),np.argwhere(unique == (truecats[i,0]))]+=1
-			#print 'time for %d pass'%(i), time.time()-begin
 		return confMatrix
 
 	def confusion_matrix_str( self, cmtx ):
@@ -50,7 +47,6 @@ class Classifier:
 		s = 'actual ->'
 		unique, mapping = np.unique(np.array(self.categories.T), return_inverse = True)
 		for i in range(len(unique)):
-			#print thing
 			s+= '%d'%(unique[i])
 			for c in range(len(str(np.amax(cmtx[:,i])))-2):
 				s+= ' '
@@ -74,6 +70,8 @@ class Classifier:
 		return str(self._type)
 
 class DecisionTreeClassifier(Classifier):
+	'''The classifier uses a single decision tree built with the training data 
+	to classify the testing data'''
 	
 	def __init__(self, dataMatrix = None, categories = None):
 		Classifier.__init__(self, 'Decision Tree Classifier')
@@ -83,19 +81,20 @@ class DecisionTreeClassifier(Classifier):
 		if dataMatrix is not None:
 			self.build(dataMatrix, categories)
 	
+	#build the decision tree
 	def build(self, A, categories):
 		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
 		self.num_classes = self.class_labels.shape[0]
 		self.tree = tree.Tree(A, categories)
 		self.tree.prune()
 	
+	#classify the given data matrix and return the classes
 	def classify(self, A):
 		return self.tree.classify(A)
 		
 
-
 class RandomTreeClassifier(Classifier):
-	
+	'''The classier uses a random decision tree to classify given data'''
 	def __init__(self, dataMatrix = None, categories = None, numfeatures = 5):
 		Classifier.__init__(self, 'Decision Tree Classifier')
 		self.categories = categories
@@ -104,17 +103,20 @@ class RandomTreeClassifier(Classifier):
 		if dataMatrix is not None:
 			self.build(dataMatrix, categories, numfeatures)
 	
+	#build a random tree with given training data
 	def build(self, A, categories, numfeatures= 5):
 		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
 		self.num_classes = self.class_labels.shape[0]
 		self.tree = tree.randomTree(A, categories, numfeatures)
 		self.tree.prune()
 	
+	#classify given data matrix
 	def classify(self, A):
 		return self.tree.classify(A)
 
 
 class ForestClassifier(Classifier):
+	'''The classifier uses an ensemble of trees, regular or random, to classify given data'''
 	
 	def __init__(self, dataMatrix = None, categories = None, numFeatures = None):
 		Classifier.__init__(self, 'ForrestClassifier')
@@ -124,12 +126,13 @@ class ForestClassifier(Classifier):
 		if dataMatrix is not None:
 			self.build(dataMatrix, categories, numFeatures)
 
+	#build a forest with given data
 	def build(self, A, categories, numFeatures = None):
 		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
 		self.num_classes = self.class_labels.shape[0]
 		self.forest = forest.Forest(A, categories, numFeatures)
 	
-	
+	#classify given data
 	def classify(self, A):
 		return self.forest.classify(A)
 		
