@@ -105,9 +105,9 @@ class Node:
 					rightCat = self.categories[self.data[:,j]>newThreshold]
 					rightWeight = self.weights[self.data[:,j]>newThreshold]
 					
-					leftDat = self.data[self.data[:,j]<newThreshold]
-					leftCat = self.categories[self.data[:,j]<newThreshold]
-					leftWeight = self.weights[self.data[:,j]<newThreshold]
+					leftDat = self.data[self.data[:,j]<=newThreshold]
+					leftCat = self.categories[self.data[:,j]<=newThreshold]
+					leftWeight = self.weights[self.data[:,j]<=newThreshold]
 					
 					right.build(rightDat, rightCat, rightWeight, self.unique)
 					left.build(leftDat, leftCat, leftWeight, self.unique)
