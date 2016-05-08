@@ -18,7 +18,17 @@ class Forest:
 		if data_size != categories.shape[0]:
 			print "training data and categories have different sizes."
 			return
+		#initialize weights
+		unique, mapping = np.unique(np.array(self.categories), return_inverse = True)
+		classCounts = np.matrix(np.zeros(shape=(len(unique), 1)))
 		weights = np.matrix(np.ones(shape=(data_size, 1)))
+		#classes with fewer data points get more weight; weights are scaled 0 to 1
+		for i in range(categories.shape[0]):
+			classCounts[categories[i] == unique]+=1
+		largest = np.max(classCounts)
+		smallest = np.min(classCounts)
+		for c in range(len(unique)):
+			weights[mapping == c] = largest/classCounts[c, 0]/smallest
 		ensemble = np.matrix(np.zeros(shape=(data_size, 1)))
 		correctCount = data_size
 		treeCount = 0
