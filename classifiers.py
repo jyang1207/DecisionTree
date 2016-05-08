@@ -93,6 +93,27 @@ class DecisionTreeClassifier(Classifier):
 		return self.tree.classify(A)
 		
 
+
+class RandomTreeClassifier(Classifier):
+	
+	def __init__(self, dataMatrix = None, categories = None, numfeatures = 5):
+		Classifier.__init__(self, 'Decision Tree Classifier')
+		self.categories = categories
+		self.num_classes = 0
+		self.class_labels = None
+		if dataMatrix is not None:
+			self.build(dataMatrix, categories, numfeatures)
+	
+	def build(self, A, categories, numfeatures= 5):
+		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
+		self.num_classes = self.class_labels.shape[0]
+		self.tree = tree.randomTree(A, categories, numfeatures)
+		self.tree.prune()
+	
+	def classify(self, A):
+		return self.tree.classify(A)
+
+
 class ForestClassifier(Classifier):
 	
 	def __init__(self, dataMatrix = None, categories = None):
