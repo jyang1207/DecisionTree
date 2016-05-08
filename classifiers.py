@@ -116,18 +116,18 @@ class RandomTreeClassifier(Classifier):
 
 class ForestClassifier(Classifier):
 	
-	def __init__(self, dataMatrix = None, categories = None):
+	def __init__(self, dataMatrix = None, categories = None, numFeatures = None):
 		Classifier.__init__(self, 'ForrestClassifier')
 		self.categories = categories
 		self.num_classes = 0
 		self.class_labels = None
 		if dataMatrix is not None:
-			self.build(dataMatrix, categories)
+			self.build(dataMatrix, categories, numFeatures)
 			
 	def build(self, A, categories):
-		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True)
+		self.class_labels, mapping = np.unique( np.array(categories.T), return_inverse = True, numFeatures= None)
 		self.num_classes = self.class_labels.shape[0]
-		self.forest = forest.Forest(A, categories)
+		self.forest = forest.Forest(A, categories, numFeatures)
 	
 	def classify(self, A):
 		return self.forest.classify(A)
