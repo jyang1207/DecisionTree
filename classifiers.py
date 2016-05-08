@@ -135,27 +135,28 @@ class ForestClassifier(Classifier):
 	#use k-fold cross validation to test the forest
 	def cross_validation(self, dataMatrix, categories, headers, k):
 		n = int(dataMatrix.shape[0]/k)
-		cmatrices = []
 		temp_matrix = dataMatrix[:, headers]
 		for i in range(k):
+			print i, 'fold'
 			if i == 0:
-				train = temp_matrix[range(i*n + n, k*n), :]
-				train_cats = categories[range(i*n + n, k*n), :]
+				train = temp_matrix[range(i*n + n, min(k*n, categories.shape[0]-1)), :]
+				train_cats = categories[range(i*n + n, min(k*n, categories.shape[0]-1)), :]
 			else:
 				train = temp_matrix[range(i*n),:]
-				train2 = temp_matrix[range(i*n + n, k*n), :]
+				train2 = temp_matrix[range(i*n + n, min(k*n, categories.shape[0]-1)), :]
 				train = np.vstack((train, train2))
 				train_cats = categories[range(i*n), :]
-				train_cats = np.vstack((train_cats, categories[range(i*n + n, k*n), :]))
+				train_cats = np.vstack((train_cats, categories[range(i*n + n, min(k*n, categories.shape[0]-1)), :]))
 			test = temp_matrix[range(i*n, i*n + n),:]
-			test_cats = categories[range(i*n, i*n + n), :]
 			f = forest.Forest(train, train_cats)
-			results = f.classify(test)
-			cmatrices.append(self.confusion_matrix(test_cats, results))
-		for cm in cmatrices:
-			print self.confusion_matrix_str(cm)
+			if i == 0:
+				results = f.classify(test)
+			else:
+				results = np.vstack((results, f.classify(test)))
+		cm = self.confusion_matrix(categories[:results.shape[0], :], results)
+		print self.confusion_matrix_str(cm)
 		
-		return cmatrices
+		return cm
 		
 	#stratified k-fold cross validation where each class is distributed evenly to each fold
 	def stratified_cv(self, dataMatrix, categories, headers, k):
@@ -177,16 +178,19 @@ class ForestClassifier(Classifier):
 				testlist += classIndices[j][i*n : i*n+n]
 			train = temp_matrix[trainlist, :]
 			train_cats = categories[trainlist, :]
-			test = temp_matrix[testlist, :]
-			test_cats = categories[testlist, :]
 			f = forest.Forest(train, train_cats)
-			results = f.classify(test)
-			cmatrices.append(self.confusion_matrix(test_cats, results))
-		for cm in cmatrices:
-			print self.confusion_matrix_str(cm)
+			test = temp_matrix[testlist, :]
+			if i == 0:
+				test_cats = categories[testlist, :]
+				results = f.classify(test)
+			else:
+				test_cats = np.vstack((test_cats, categories[testlist, :]))
+				results = np.vstack((results, f.classify(test)))
+		cm = self.confusion_matrix(test_cats, results)
+		print self.confusion_matrix_str(cm)
 		
-		return cmatrices
-		
+		return cm
+
 		
 class NaiveBayes(Classifier):
 	'''NaiveBayes implements a simple NaiveBayes classifier using a
