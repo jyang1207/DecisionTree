@@ -157,7 +157,7 @@ class ForestClassifier(Classifier):
 		cm = self.confusion_matrix(categories[:results.shape[0], :], results)
 		print self.confusion_matrix_str(cm)
 		
-		return cm
+		return results
 		
 	#stratified k-fold cross validation where each class is distributed evenly to each fold
 	def stratified_cv(self, dataMatrix, categories, headers, k):
@@ -170,6 +170,7 @@ class ForestClassifier(Classifier):
 		cmatrices = []
 		temp_matrix = dataMatrix[:, headers]
 		for i in range(k):
+			print i, 'fold'
 			trainlist = []
 			testlist = []
 			for j in range(len(classIndices)):
@@ -190,7 +191,7 @@ class ForestClassifier(Classifier):
 		cm = self.confusion_matrix(test_cats, results)
 		print self.confusion_matrix_str(cm)
 		
-		return cm
+		return results
 
 		
 class NaiveBayes(Classifier):
