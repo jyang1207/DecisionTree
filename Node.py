@@ -57,20 +57,24 @@ class Node:
 		
 		minimum = np.min(self.data, axis =0)
 		maximum = np.max(self.data, axis = 0)
-		while True:
+		for i in range(1000):
 			startFeature = random.choice(features)
 			startRow = np.random.randint(self.data.shape[0])
+			#print startRow, startFeature
 			bestThreshold = self.data[startRow, startFeature]
 			rightDat = self.data[self.data[:,startFeature]>bestThreshold]
 			rightCat = self.categories[self.data[:,startFeature]>bestThreshold]
 			rightWeight = self.weights[self.data[:,startFeature]>bestThreshold]
 					
-			leftDat = self.data[self.data[:,startFeature]<bestThreshold]
-			leftCat = self.categories[self.data[:,startFeature]<bestThreshold]
-			leftWeight = self.weights[self.data[:,startFeature]<bestThreshold]
+			leftDat = self.data[self.data[:,startFeature]<=bestThreshold]
+			leftCat = self.categories[self.data[:,startFeature]<=bestThreshold]
+			leftWeight = self.weights[self.data[:,startFeature]<=bestThreshold]
 			
-			if  not(bestThreshold == maximum[startFeature] or bestThreshold == minimum[startFeature]):
+			if  not(bestThreshold == maximum[startFeature]):
 				break
+		if i == 999:
+			print 'you were probably in an infinite loop due to the last few datapoints being the same so we saved you that trouble'
+			raise
 		
 		bestFeature = startFeature
 		best[0] = Node(self.depth-1, self.z)
